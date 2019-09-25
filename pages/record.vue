@@ -14,30 +14,16 @@
         >
           <v-col
             cols="2">
-            <v-btn color="primary" @click="startCapture">録画開始</v-btn>
+            <v-btn v-if="videoChunks.length === 0" color="primary" @click="startCapture">
+              <v-icon>mdi-play-circle-outline</v-icon>録画開始
+            </v-btn>
+            <v-btn v-if="videoChunks.length !== 0" color="error" @click="stopCapture">
+              <v-icon>mdi-pause-circle-outline</v-icon>録画停止
+            </v-btn>
           </v-col>
           <v-col
             cols="9">
-            <video autoplay :srcObject.prop="stream"></video>
-          </v-col>
-        </v-layout>
-
-        <div style="width: 100vw; height; 3vh"></div>
-        <!-- step2 -->
-        <v-layout
-          row
-          justify-center
-          align-center
-        >
-          <v-col
-            cols="2">
-            <v-btn color="primary" @click="stopCapture">録画停止 {{this.chunks.length}}</v-btn>
-            <a id="download" :url="micRecording">Download</a>
-          </v-col>
-          <v-col
-            cols="9">
-            <!-- <video autoplay :src="recording"></video> -->
-            <audio id="player" controls :src="micRecording"></audio>
+            <video controls :src="videoObject"></video>
           </v-col>
         </v-layout>
     </v-col>
@@ -48,73 +34,41 @@
 export default {
   data () {
     return {
-      stream: undefined,
-      recorder: undefined,
-      chunks: [],
-      recording: undefined,
-      micStream: undefined,
-      recordChunk: [],
-      micRecorder: undefined,
-      micRecording: undefined
+      videoChunks: [],
+      videoObject: undefined,
+      mediaRecorder: undefined,
     }
   },
   methods: {
     async startCapture () {
+      const result = await navigator.permissions.query({name:'microphone'})        
       try {
-        // 映像
-        this.chunks = []
-        this.stream = await navigator.mediaDevices.getDisplayMedia({
+        this.videoChunks = []
+        const videoStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
           audio: false
         })
-        this.recorder = new MediaRecorder(this.stream, {mimeType: 'video/webm'})
-        this.recorder.addEventListener('dataavailable', event => {
-          if (event.data && event.data.size > 0) {
-            this.chunks.push(event.data);
-          }
-        })
-        this.recorder.start(10)
-
-        // マイク
-        const result = await navigator.permissions.query({name:'microphone'})
-        
-        const options = {mimeType: 'video/webm;codecs=vp9'}
-        this.micStream = await navigator.mediaDevices.getUserMedia({
+        const audioStream = await navigator.mediaDevices.getUserMedia({
           video: false,
           audio: true
         })
-        this.micRecorder = new MediaRecorder(this.micStream, options)
-        this.micRecorder.addEventListener('dataavailable', e => {
-          if (e.data && e.data.size > 0) {
-            this.recordChunk.push(e.data);
+        const combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
+        this.mediaRecorder = new MediaRecorder(combinedStream)
+        this.mediaRecorder.addEventListener('dataavailable', event => {
+          if (event.data && event.data.size > 0) {
+            this.videoChunks.push(event.data);
           }
         })
-        this.micRecorder.start()
-
-
-        // this.context = new AudioContext()
-        // const input = this.context.createMediaStreamSource(this.micStream)
-        // const processor = this.context.createScriptProcessor(1024,1,1)
-        // processor.connect(this.context.destination)
-        // processor.onaudioprocess = function(e){
-        //  // Do something with the data, i.e Convert this to WAV
-        //  console.log(e.inputBuffer)
-        // }
-
+        this.mediaRecorder.start(10)
       } catch(err) {
         console.error("Error: " + err)
       }
     },
     async stopCapture () {
       try {
-        this.recorder.stop()
-        this.recorder = undefined;
-        this.stream.getTracks().forEach(track => track.stop())
-        this.stream = undefined;
-        this.recording = window.URL.createObjectURL(new Blob(this.chunks, {type: 'video/webm'}))
-
-        this.micRecorder.stop()
-        this.micRecording = window.URL.createObjectURL(this.recordChunk)
+        this.mediaRecorder.stop()
+        this.mediaRecorder = undefined;
+        this.videoObject = window.URL.createObjectURL(new Blob(this.videoChunks, {type: 'video/webm'}))
       } catch(err) {
         console.error("Error: " + err)
       }
