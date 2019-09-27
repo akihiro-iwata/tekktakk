@@ -24,12 +24,16 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :clipped-left="false"
       fixed
       app
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
+      <div class="flex-grow-1"></div>
+      <v-btn icon>
+        <img class="icon" :src="photoURL"/>
+      </v-btn>
+      <div style="height: 100%; width: 2vw"></div>
     </v-app-bar>
     <v-content>
       <nuxt />
@@ -46,11 +50,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import loading from '~/components/loading'
 import error from "~/components/error"
 
 export default {
   components: { loading, error },
+  computed: {
+    ...mapGetters('user', ['name', 'photoURL'])
+  },
   data () {
     return {
       drawer: false,
@@ -78,3 +86,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+</style>

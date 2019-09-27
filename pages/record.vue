@@ -14,35 +14,68 @@
         >
           <v-col
             cols="2">
-            <v-btn v-if="videoChunks.length === 0" color="primary" @click="startCapture">
-              <v-icon>mdi-play-circle-outline</v-icon>録画開始
-            </v-btn>
-            <v-btn v-if="videoChunks.length !== 0" color="error" @click="stopCapture">
-              <v-icon>mdi-pause-circle-outline</v-icon>録画停止
-            </v-btn>
+            <div class="step-1">
+              <v-btn v-if="videoChunks.length === 0" color="primary" @click="startCapture" :disabled="!isMicrophonePermitted">
+                <v-icon>mdi-play-circle-outline</v-icon>録画開始
+              </v-btn>
+              <v-btn v-if="videoChunks.length !== 0 && isRecording" color="error" @click="stopCapture">
+                <v-icon>mdi-pause-circle-outline</v-icon>録画停止
+              </v-btn>
+              <div style="width: 100%; height: 2vh"></div>
+              <v-btn v-if="videoChunks.length !== 0 && !isRecording" @click="showUploadModal = true" color="primary">
+                <v-icon>mdi-cloud-upload</v-icon>アップロード
+              </v-btn>
+              <div style="width: 100%; height: 2vh"></div>
+              <v-btn v-if="videoChunks.length !== 0 && !isRecording" @click="reStartCapture" color="primary">
+                <v-icon>mdi-play-circle-outline</v-icon>再録画
+              </v-btn>
+            </div>
           </v-col>
           <v-col
             cols="9">
-            <video controls :src="videoObject"></video>
+            <video v-show="!isRecording" controls :src="videoUrlObject"></video>
+            <video v-show="isRecording" autoplay :srcObject.prop="combinedStream"></video>
           </v-col>
         </v-layout>
     </v-col>
+    <MicrophonePermissionModal v-if="showModal"  @close="modalClose"/>
+    <TakkUploadModal v-if="showUploadModal" @close="showUploadModal = false" @upload="upload({ title, slideUrl })" />
   </v-layout>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import MicrophonePermissionModal from '~/components/record/MicrophonePermissionModal'
+import TakkUploadModal from '~/components/record/TakkUploadModal'
+
 export default {
+  components: { MicrophonePermissionModal, TakkUploadModal },
+  async mounted () {
+    const result = await navigator.permissions.query({ name: 'microphone' })
+    if (result.state !== 'granted') {
+      this.showModal = true
+      this.isMicrophonePermitted = false
+    } else {
+      this.isMicrophonePermitted = true
+    }
+  },
   data () {
     return {
       videoChunks: [],
       videoObject: undefined,
+      videoUrlObject: undefined,
       mediaRecorder: undefined,
+      isMicrophonePermitted: false,
+      showModal: false,
+      showUploadModal: false,
+      combinedStream: undefined,
+      isRecording: false
     }
   },
   methods: {
+    ...mapActions('loading', ['activate', 'deactivate']),
     async startCapture () {
-      const result = await navigator.permissions.query({ name: 'microphone' })
-      console.log('result', result)
+      this.isRecording = true
       try {
         this.videoChunks = []
         const videoStream = await navigator.mediaDevices.getDisplayMedia({
@@ -53,9 +86,9 @@ export default {
           video: false,
           audio: true
         })
-        const combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
-          this.mediaRecorder = new MediaRecorder(videoStream)
-          this.mediaRecorder.addEventListener('dataavailable', event => {
+        this.combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
+        this.mediaRecorder = new MediaRecorder(this.combinedStream, {mimeType: 'video/webm'})
+        this.mediaRecorder.addEventListener('dataavailable', event => {
             if (event.data && event.data.size > 0) {
               this.videoChunks.push(event.data);
             }
@@ -66,13 +99,29 @@ export default {
       }
     },
     async stopCapture () {
+      this.isRecording = false
       try {
+        const tracks = this.combinedStream.getTracks()
+        tracks.forEach((track) => {
+          track.stop()
+        })
         this.mediaRecorder.stop()
-        this.mediaRecorder = undefined;
-        this.videoObject = window.URL.createObjectURL(new Blob(this.videoChunks, {type: 'video/webm'}))
+        this.mediaRecorder = undefined
+        this.videoObject = new Blob(this.videoChunks, {type: 'video/webm'})
+        this.videoUrlObject = window.URL.createObjectURL(this.videoObject)
       } catch(err) {
-        console.error("Error: " + err)
+        console.error("Error: ", err)
       }
+    },
+    async reStartCapture () {
+
+
+    },
+    async upload ({ title, slideUrl }) {
+      this.activate()
+    },
+    modalClose () {
+      this.showModal = false
     }
   }
 }

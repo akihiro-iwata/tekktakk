@@ -6,7 +6,7 @@ export const state = () => ({
 
 export const mutations = {
     SET_USER (state, { uid, displayName, email, photoURL }) {
-        const user = new User( uid, displayName, email, photoURL )
+        const user = new User({ uid, displayName, email, photoURL })
         state.user = user
     },
     UNSET_USER(state) {
