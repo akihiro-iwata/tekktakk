@@ -1,30 +1,16 @@
 <template>
   <v-layout justify-center align-center row>
-    <!-- tabs -->
-    <v-layout row justify-center align-center>
-      <v-col cols="11">
-        <v-tabs :grow="true">
-          <v-tab @click="mode = 'recent'">最近のアップロード</v-tab>
-          <v-tab @click="mode = 'programming'">プログラミング</v-tab>
-          <v-tab>ガジェット</v-tab>
-          <v-tab>マネジメント・開発手法</v-tab>
-          <v-tab>エモ話</v-tab>
-        </v-tabs>
-      </v-col>
-    </v-layout>
-
-    <!-- 最近のアップロード -->
-    <v-layout v-if="isRecentMode" justify-center align-center class="recent">
+    <v-layout justify-center align-center>
       <!-- ヒロイン -->
       <v-row no-gutters>
         <div class="heroine">
           <v-row no-gutters class="flex">
             <v-col cols="11" lg="4" xl="4">
               <v-card class="card">
-                <v-card-title>Share your TechTalk!</v-card-title>
-                <v-card-text>XXはあなたのテックトークを組織内で簡単にシェアするためのサービスです。めんどうな撮影準備と動画アップロードからあなたを解放し、シンプルなソリューションを提供します。</v-card-text>
+                <v-card-title>Share your Knowledge!</v-card-title>
+                <v-card-text>TekkTakkはあなたのテックトークを組織内で簡単にシェアするためのサービスです。めんどうな撮影準備と動画アップロードからあなたを解放し、シンプルなソリューションを提供します。</v-card-text>
                 <v-card-actions>
-                  <v-btn outlined color="primary">アップロード</v-btn>
+                  <v-btn outlined color="primary" @click="toRecord">アップロード</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -73,10 +59,6 @@
       </v-layout>
     </v-layout>
 
-    <!-- プログラミング -->
-    <v-layout v-if="isProgrammingMode" row justify-center align-center>
-      <div>programming</div>
-    </v-layout>
   </v-layout>
 </template>
 
@@ -90,13 +72,13 @@ export default {
       mode: "recent" ,
       talks: [
         {
-          date: '',
-          title: '',
-          author: '',
-          genre: '',
+          date: '2019/1/11',
+          title: '技術書典に申し込んで本を売るまで',
+          author: '西名',
+          genre: 'その他',
           views: 10,
           like: 5,
-          slide: ''
+          slide: 'https://drive.google.com/file/d/101_ivAdephhW-1al24tHdn1jXRy1HmWb/view?usp=sharing'
         }
       ]
     };
@@ -107,6 +89,11 @@ export default {
     },
     isProgrammingMode() {
       return this.mode === "programming";
+    }
+  },
+  methods: {
+    toRecord () {
+      this.$router.push('/record')
     }
   }
 };
@@ -123,6 +110,7 @@ h2 {
 
 .row {
   width: 100vw;
+  margin: 0;
 }
 
 .flex {
@@ -131,28 +119,26 @@ h2 {
   align-items: center;
 }
 
-.recent {
-  .heroine {
-    width: 100%;
-    height: 40vh;
-    background-image: url("~assets/img/books.jpg");
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.heroine {
+  width: 100%;
+  height: 40vh;
+  background-image: url("~assets/img/books.jpg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    .card {
-      min-height: 80%;
+  .card {
+    min-height: 80%;
 
-      .v-card__actions {
-        padding-left: 20px;
-      }
+    .v-card__actions {
+      padding-left: 20px;
     }
   }
+}
 
-  .talk-card-list {
-    max-width: 85vw;
-    display: flex;
-    justify-content: flex-start;
-  }
+.talk-card-list {
+  max-width: 85vw;
+  display: flex;
+  justify-content: flex-start;
 }
 </style>
