@@ -40,11 +40,17 @@
     >
       <span>&copy; akihiro-iwata@m3</span>
     </v-footer>
+    <loading/>
+    <error/>
   </v-app>
 </template>
 
 <script>
+import loading from '~/components/loading'
+import error from "~/components/error"
+
 export default {
+  components: { loading, error },
   data () {
     return {
       drawer: false,
@@ -67,7 +73,7 @@ export default {
         }
       ],
       miniVariant: false,
-      title: 'Vuetify.js'
+      title: 'TekkTakk'
     }
   }
 }

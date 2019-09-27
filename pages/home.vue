@@ -87,7 +87,18 @@ export default {
   components: { TalkCard },
   data() {
     return {
-      mode: "recent"
+      mode: "recent" ,
+      talks: [
+        {
+          date: '',
+          title: '',
+          author: '',
+          genre: '',
+          views: 10,
+          like: 5,
+          slide: ''
+        }
+      ]
     };
   },
   computed: {

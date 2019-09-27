@@ -41,7 +41,8 @@ export default {
   },
   methods: {
     async startCapture () {
-      const result = await navigator.permissions.query({name:'microphone'})        
+      const result = await navigator.permissions.query({ name: 'microphone' })
+      console.log('result', result)
       try {
         this.videoChunks = []
         const videoStream = await navigator.mediaDevices.getDisplayMedia({
@@ -53,11 +54,11 @@ export default {
           audio: true
         })
         const combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
-        this.mediaRecorder = new MediaRecorder(combinedStream)
-        this.mediaRecorder.addEventListener('dataavailable', event => {
-          if (event.data && event.data.size > 0) {
-            this.videoChunks.push(event.data);
-          }
+          this.mediaRecorder = new MediaRecorder(videoStream)
+          this.mediaRecorder.addEventListener('dataavailable', event => {
+            if (event.data && event.data.size > 0) {
+              this.videoChunks.push(event.data);
+            }
         })
         this.mediaRecorder.start(10)
       } catch(err) {
