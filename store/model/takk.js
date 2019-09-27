@@ -4,6 +4,5 @@ export default class {
         this.title = title;
         this.slide = slide;
         this.video = video;
-        this.fileName = new Date().getTime().toString(16);
     }  
 }

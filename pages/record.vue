@@ -38,8 +38,9 @@
           </v-col>
         </v-layout>
     </v-col>
-    <MicrophonePermissionModal v-if="showModal"  @close="modalClose"/>
-    <TakkUploadModal v-if="showUploadModal" @close="showUploadModal = false" @upload="upload({ title, slideUrl })" />
+    <MicrophonePermissionModal v-if="showMicrophoneModal"  @close="modalClose"/>
+    <TakkUploadModal v-if="showUploadModal" @close="showUploadModal = false" @upload="uploadVideo" />
+    <UploadCompleteModal v-if="showUploadCompleteModal" @close="toHome"/>
   </v-layout>
 </template>
 
@@ -47,13 +48,14 @@
 import { mapActions } from 'vuex'
 import MicrophonePermissionModal from '~/components/record/MicrophonePermissionModal'
 import TakkUploadModal from '~/components/record/TakkUploadModal'
+import UploadCompleteModal from '~/components/record/UploadCompleteModal'
 
 export default {
-  components: { MicrophonePermissionModal, TakkUploadModal },
+  components: { MicrophonePermissionModal, TakkUploadModal, UploadCompleteModal },
   async mounted () {
     const result = await navigator.permissions.query({ name: 'microphone' })
     if (result.state !== 'granted') {
-      this.showModal = true
+      this.showMicrophoneModal = true
       this.isMicrophonePermitted = false
     } else {
       this.isMicrophonePermitted = true
@@ -66,14 +68,16 @@ export default {
       videoUrlObject: undefined,
       mediaRecorder: undefined,
       isMicrophonePermitted: false,
-      showModal: false,
-      showUploadModal: false,
       combinedStream: undefined,
-      isRecording: false
+      isRecording: false,
+      showMicrophoneModal: false,
+      showUploadModal: false,
+      showUploadCompleteModal: false,
     }
   },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
+    ...mapActions('takk', ['upload', 'save']),
     async startCapture () {
       this.isRecording = true
       try {
@@ -109,6 +113,7 @@ export default {
         this.mediaRecorder = undefined
         this.videoObject = new Blob(this.videoChunks, {type: 'video/webm'})
         this.videoUrlObject = window.URL.createObjectURL(this.videoObject)
+        this.save({ videoObject: this.videoObject })
       } catch(err) {
         console.error("Error: ", err)
       }
@@ -117,11 +122,23 @@ export default {
 
 
     },
-    async upload ({ title, slideUrl }) {
+    async uploadVideo ({ title, slideUrl }) {
+      console.log('title', title)
       this.activate()
+      try {
+        await this.upload({ title, slideUrl })
+        this.deactivate()
+        this.showUploadCompleteModal = true
+      } catch (e) {
+        console.error(e)
+        this.deactivate()
+      }
     },
     modalClose () {
-      this.showModal = false
+      this.showMicrophoneModal = false
+    },
+    toHome () {
+      this.$router.push('/home')
     }
   }
 }

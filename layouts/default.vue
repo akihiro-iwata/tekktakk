@@ -18,7 +18,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title v-text="item.title" @click="toHome" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -65,23 +65,28 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Home',
+          icon: 'mdi-home',
+          title: 'ホーム',
           to: '/home'
         },
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/welcome'
+          icon: 'mdi-movie',
+          title: '録画',
+          to: '/record'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-account-circle',
+          title: 'マイページ',
+          to: '/home'
         }
       ],
       miniVariant: false,
       title: 'TekkTakk'
+    }
+  },
+  methods: {
+    toHome () {
+      this.$router.push('/home')
     }
   }
 }

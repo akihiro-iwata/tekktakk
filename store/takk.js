@@ -1,7 +1,6 @@
 import Takk from './model/takk'
 import { storage } from '~/plugins/firebase'
 
-// TODO: takk/create apiを叩く
 export const state = () => ({
     latest: undefined,
     archives: []
@@ -13,33 +12,29 @@ export const mutations = {
     },
 }
 
+const __fileName = () => {
+    const now = new Date()
+    return `${now.getFullYear()}-${(now.getMonth() + 1)}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`
+}
+
 export const actions = {
-    save ({ commit }, { title, slide }) {
-        commit('SET_LATEST', videoObject)
+    save ({ commit }, { videoObject }) {
+        commit('SET_LATEST', { videoObject })
     },
-    async upload({ state, commit }) {
-        const ref = storage.ref().child(`${fileName}.webm`)
+    async upload({ state, commit, rootState }, { title, slideUrl }) {
+        const fileName = `${__fileName()}.webm`
+        const ref = storage.ref('movies').child(fileName)
         await ref.put(state.latest)
         const downloadUrl = await ref.getDownloadURL()
-        // call api
-        // const res = await this.$axios.post('/api/takks/create', { uid, displayName, email, photoURL })
-    },
-    logout({ commit }) {
-        commit('UNSET_USER')
+        const res = await this.$axios.post('/api/takks/create', { 
+            uid: rootState.user.user.uid, 
+            video: downloadUrl,
+            slide: slideUrl,
+            title,
+            fileName,
+        })
     },
 }
 
 export const getters = {
-    uid (state) {
-        return state.user.uid
-    },
-    name (state) {
-        return state.user.displayName
-    },
-    email (state) {
-        return state.user.email
-    },
-    photoURL (state) {
-        return state.user.photoURL
-    },
 }
