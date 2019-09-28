@@ -119,7 +119,6 @@
 <script>
 import { mapActions } from 'vuex'
 import MicrophonePermissionModal from '~/components/record/MicrophonePermissionModal'
-import TakkUploadModal from '~/components/record/TakkUploadModal'
 import UploadCompleteModal from '~/components/record/UploadCompleteModal'
 import ThumbnailConfirmModal from '~/components/record/ThumbnailConfirmModal'
 
@@ -189,7 +188,7 @@ export default {
         this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
       }
     },
-    async stopCapture () {
+    stopCapture () {
       this.isRecording = false
       try {
         const tracks = this.combinedStream.getTracks()

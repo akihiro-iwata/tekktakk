@@ -45,7 +45,7 @@ export const actions = {
     commit('SET_ADMIN', { isAdmin })
   },
   async getAllStaff ({ commit, state }) {
-    const { data } = await this.$axios.post('/api/users/index/all', { uid: state.user.uid, companyId: state.user.companyId })
+    await this.$axios.post('/api/users/index/all', { uid: state.user.uid, companyId: state.user.companyId })
   },
   logout ({ commit }) {
     commit('UNSET_USER')

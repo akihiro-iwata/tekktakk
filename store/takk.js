@@ -47,7 +47,7 @@ export const actions = {
     await thumbnailFileNameRef.put(state.thumbnail)
     const thumbnailDownloadUrl = await thumbnailFileNameRef.getDownloadURL()
 
-    const res = await this.$axios.post('/api/takks/create', {
+    await this.$axios.post('/api/takks/create', {
       uid: rootState.user.user.uid,
       video: movieDownloadUrl,
       slide: slideUrl,
