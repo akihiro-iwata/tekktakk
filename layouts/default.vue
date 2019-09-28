@@ -18,21 +18,27 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" @click="toHome" />
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="doLogout">
+          <v-list-item-action>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="'ログアウト'"/>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
+      v-if="$route.name !== 'index'"
       fixed
       app
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <div class="flex-grow-1"></div>
-      <v-btn icon>
-        <img v-if="photoURL" class="icon" :src="photoURL"/>
-      </v-btn>
       <div style="height: 100%; width: 2vw"></div>
     </v-app-bar>
     <v-content>
@@ -50,7 +56,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import loading from '~/components/loading'
 import error from "~/components/error"
 
@@ -74,19 +80,19 @@ export default {
           title: '録画',
           to: '/record'
         },
-        {
-          icon: 'mdi-account-circle',
-          title: 'マイページ',
-          to: '/home'
-        }
       ],
       miniVariant: false,
       title: 'TekkTakk'
     }
   },
   methods: {
+    ...mapActions('user', ['logout']),
     toHome () {
       this.$router.push('/home')
+    },
+    doLogout () {
+      this.logout()
+      window.location.href = '/'
     }
   }
 }

@@ -84,6 +84,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field v-model="title" label="タイトル*" required></v-text-field>
+                      <div v-show="!titleEntered" class="v-messages__message">タイトルは必須です</div>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field v-model="slideUrl" label="スライドURL"></v-text-field>
@@ -124,6 +125,11 @@ export default {
       this.isMicrophonePermitted = false
     } else {
       this.isMicrophonePermitted = true
+    }
+  },
+  computed: {
+    titleEntered () {
+      return this.title.length !== 0
     }
   },
   data () {
@@ -235,6 +241,7 @@ export default {
       }
     },
     async uploadVideo () {
+      if (this.title.length === 0) return
       this.activate()
       try {
         await this.upload({ title: this.title, slideUrl: this.slideUrl })
@@ -257,6 +264,11 @@ export default {
       });
       return blob;
     },
+    validate () {
+      if (this.$refs.form.validate()) {
+        this.snackbar = true
+      }
+    },
     modalClose () {
       this.showThumnailModal = true
       this.showMicrophoneModal = false
@@ -276,6 +288,10 @@ video {
 
 .canvas {
   display: none;
+}
+
+.v-messages__message {
+  color: #E53935;
 }
 
 .image-list {

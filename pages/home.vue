@@ -30,14 +30,14 @@
       <v-layout row justify-center align-center>
         <v-col 
           cols="12"
-          lg="9"
-          xl="9">
+          lg="11"
+          xl="11">
           <v-layout row justify-start align-center>
             <v-col
               cols="12"
               md="6"
-              lg="3"
-              xl="3"
+              lg="5"
+              xl="6"
               v-for="takk in allTakks"
               :key="takk.index"
               @click="toWatch(takk.video)"
