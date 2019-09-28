@@ -2,14 +2,18 @@ import Takk from './model/takk'
 import { storage } from '~/plugins/firebase'
 
 export const state = () => ({
-    latest: undefined,
+    video: undefined,
+    thumbnail: undefined,
     archives: []
 })
 
 export const mutations = {
-    SET_LATEST (state, { videoObject }) {
-        state.latest = videoObject
+    SET_video (state, { videoObject }) {
+        state.video = videoObject
     },
+    SET_THUMBNAIL (state, { thumbnail }) {
+        state.thumbnail = thumbnail
+    }
 }
 
 const __fileName = () => {
@@ -19,19 +23,29 @@ const __fileName = () => {
 
 export const actions = {
     save ({ commit }, { videoObject }) {
-        commit('SET_LATEST', { videoObject })
+        commit('SET_video', { videoObject })
+    },
+    saveThumbnail ({ commit }, { thumbnail }) {
+        commit('SET_THUMBNAIL', { thumbnail })
     },
     async upload({ state, commit, rootState }, { title, slideUrl }) {
-        const fileName = `${__fileName()}.webm`
-        const ref = storage.ref('movies').child(fileName)
-        await ref.put(state.latest)
-        const downloadUrl = await ref.getDownloadURL()
+        const movieFileName = `${__fileName()}.webm`
+        const movieFileNameRef = storage.ref('movies').child(movieFileName)
+        await movieFileNameRef.put(state.video)
+        const movieDownloadUrl = await movieFileNameRef.getDownloadURL()
+
+        const thumbnailFileName = `${__fileName()}.png`
+        const thumbnailFileNameRef = storage.ref('movies').child(thumbnailFileName)
+        await thumbnailFileNameRef.put(state.thumbnail)
+        const thumbnailDownloadUrl = await thumbnailFileNameRef.getDownloadURL()
+
         const res = await this.$axios.post('/api/takks/create', { 
             uid: rootState.user.user.uid, 
-            video: downloadUrl,
+            video: movieDownloadUrl,
             slide: slideUrl,
+            thumbnail: thumbnailDownloadUrl,
             title,
-            fileName,
+            movieFileName,
         })
     },
 }
