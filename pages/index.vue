@@ -1,11 +1,17 @@
 <template>
   <div class="index-container">
     <div class="copy">
-      <div class="wo">あなたの発信を拡張する</div>
-      <div class="describe">TekkTakkはあなたの登壇スピーチとスライドを組織内へセキュアかつ簡単に共有するためのサービスです。</div>
+      <div class="wo">
+        あなたの発信を拡張する
+      </div>
+      <div class="describe">
+        TekkTakkはあなたの登壇スピーチとスライドを組織内へセキュアかつ簡単に共有するためのサービスです。
+      </div>
     </div>
     <div class="login">
-      <v-btn rounded color="primary button" @click="googleLogin">Googleでログイン</v-btn>
+      <v-btn rounded color="primary button" @click="googleLogin">
+        Googleでログイン
+      </v-btn>
     </div>
   </div>
 </template>
@@ -21,6 +27,7 @@ export default {
       const authState = await auth.getRedirectResult()
       if (authState.user) {
         await this.login(authState)
+        await this.adminCheck()
         this.$router.push('/home')
       }
       this.deactivate()
@@ -35,8 +42,8 @@ export default {
   },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
-    ...mapActions('error', ['showError',]),
-    ...mapActions('user', ['login']),
+    ...mapActions('error', ['showError']),
+    ...mapActions('user', ['login', 'adminCheck']),
     async googleLogin () {
       try {
         this.activate()
@@ -46,7 +53,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <video controls :src="watchVideo"></video>
+  <video controls :src="watchVideo" />
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 {
-  "name": "techtalk-record",
+  "name": "tekktakk",
   "version": "1.0.0",
-  "description": "My rad Nuxt.js project",
+  "description": "share your techtalk",
   "author": "akihiro-iwata@m3",
   "private": true,
   "scripts": {
@@ -28,6 +28,7 @@
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
+    "css-loader": "^3.2.0",
     "eslint": "^6.1.0",
     "eslint-plugin-nuxt": ">=0.4.2",
     "jest": "^24.1.0",

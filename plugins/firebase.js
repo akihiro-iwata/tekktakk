@@ -4,7 +4,7 @@ import 'firebase/storage'
 import config from './firebase.config.js'
 
 if (!firebase.apps.length) {
-    firebase.initializeApp(config)
+  firebase.initializeApp(config)
 }
 
 firebase.auth().languageCode = 'ja'

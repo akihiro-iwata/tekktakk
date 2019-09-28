@@ -18,7 +18,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title"/>
+            <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="doLogout">
@@ -26,7 +26,15 @@
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="'ログアウト'"/>
+            <v-list-item-title v-text="'ログアウト'" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="isAdmin" @click="toAdmin">
+          <v-list-item-action>
+            <v-icon>business</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="'管理画面'" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -38,8 +46,8 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
-      <div class="flex-grow-1"></div>
-      <div style="height: 100%; width: 2vw"></div>
+      <div class="flex-grow-1" />
+      <div style="height: 100%; width: 2vw" />
     </v-app-bar>
     <v-content>
       <nuxt />
@@ -50,20 +58,20 @@
     >
       <span>&copy; akihiro-iwata@m3</span>
     </v-footer>
-    <loading/>
-    <error/>
+    <loading />
+    <error />
   </v-app>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import loading from '~/components/loading'
-import error from "~/components/error"
+import error from '~/components/error'
 
 export default {
   components: { loading, error },
   computed: {
-    ...mapGetters('user', ['name', 'photoURL'])
+    ...mapGetters('user', ['name', 'photoURL', 'isAdmin'])
   },
   data () {
     return {
@@ -79,7 +87,7 @@ export default {
           icon: 'mdi-movie',
           title: '録画',
           to: '/record'
-        },
+        }
       ],
       miniVariant: false,
       title: 'TekkTakk'
@@ -93,6 +101,9 @@ export default {
     doLogout () {
       this.logout()
       window.location.href = '/'
+    },
+    toAdmin () {
+      this.$router.push('/admin')
     }
   }
 }

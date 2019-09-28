@@ -3,19 +3,18 @@
     <img
       class="white--text"
       :src="thumbnail"
-    />
+    >
     <v-card-text>
-      <span>{{publishDate}}</span>
-      <br />
+      <span>{{ publishDate }}</span>
+      <br>
       <span class="text--primary">
-        <span>{{title}}</span>
+        <span>{{ title }}</span>
       </span>
-      <br />
+      <br>
       <div class="text--primary">
-        <span>{{handleName}}</span>
+        <span>{{ handleName }}</span>
       </div>
     </v-card-text>
-
   </v-card>
 </template>
 

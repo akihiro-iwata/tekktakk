@@ -10,72 +10,79 @@
                 <v-card-title>Share your Knowledge!</v-card-title>
                 <v-card-text>TekkTakkはあなたのテックトークを組織内で簡単にシェアするためのサービスです。めんどうな撮影準備と動画アップロードからあなたを解放し、シンプルなソリューションを提供します。</v-card-text>
                 <v-card-actions>
-                  <v-btn color="primary" @click="toRecord">録画開始</v-btn>
+                  <v-btn color="primary" @click="toRecord">
+                    録画開始
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
-            <v-col cols="0" lg="7" xl="7"></v-col>
+            <v-col cols="0" lg="7" xl="7" />
           </v-row>
         </div>
       </v-row>
 
       <!-- ユーザーのアップロード一覧 -->
-      <div style="width: 100%; height: 3vh"></div>
+      <div style="width: 100%; height: 3vh" />
       <v-row no-gutters>
         <v-col cols="11" lg="4" xl="4">
-          <h2 style="margin-left: 4vw">あなたのアップロード</h2>
+          <h2 style="margin-left: 4vw">
+            あなたのアップロード
+          </h2>
         </v-col>
       </v-row>
       <v-layout row justify-center align-center>
-        <v-col 
-          cols="12">
+        <v-col
+          cols="12"
+        >
           <v-layout row justify-start align-center>
             <v-col
+              v-for="takk in myTakks"
+              :key="takk.index"
               cols="12"
               md="4"
               lg="3"
               xl="3"
-              v-for="takk in myTakks"
-              :key="takk.index"
               @click="toWatch(takk.video)"
             >
-              <TalkCard :showDeleteBtn=true :thumbnail="takk.thumbnail" :publishDate="takk.publishDate" :title="takk.title" :handleName="takk.handleName"/>
+              <TalkCard :show-delete-btn="true" :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
             </v-col>
           </v-layout>
         </v-col>
       </v-layout>
     </v-layout>
 
-      <!-- 最近のアップロード一覧 -->
-      <div style="width: 100%; height: 3vh"></div>
-      <v-row no-gutters>
-        <v-col cols="11" lg="4" xl="4">
-          <h2 style="margin-left: 4vw">最近のアップロード</h2>
-        </v-col>
-      </v-row>
-      <v-layout row justify-center align-center>
-        <v-col cols="12">
-          <v-layout row justify-start align-center>
-            <v-col
-              cols="12"
-              md="4"
-              lg="3"
-              xl="3"
-              v-for="takk in allTakks"
-              :key="takk.index"
-              @click="toWatch(takk.video)"
-            >
-              <TalkCard :thumbnail="takk.thumbnail" :publishDate="takk.publishDate" :title="takk.title" :handleName="takk.handleName"/>
-            </v-col>
-          </v-layout>
-        </v-col>
-      </v-layout>
+    <!-- 最近のアップロード一覧 -->
+    <div style="width: 100%; height: 3vh" />
+    <v-row no-gutters>
+      <v-col cols="11" lg="4" xl="4">
+        <h2 style="margin-left: 4vw">
+          最近のアップロード
+        </h2>
+      </v-col>
+    </v-row>
+    <v-layout row justify-center align-center>
+      <v-col cols="12">
+        <v-layout row justify-start align-center>
+          <v-col
+            v-for="takk in allTakks"
+            :key="takk.index"
+            cols="12"
+            md="4"
+            lg="3"
+            xl="3"
+            @click="toWatch(takk.video)"
+          >
+            <TalkCard :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
+          </v-col>
+        </v-layout>
+      </v-col>
+    </v-layout>
   </v-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import TalkCard from "~/components/index/TalkCard.vue"
+import TalkCard from '~/components/index/TalkCard.vue'
 
 export default {
   components: { TalkCard },
@@ -92,7 +99,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('takk', ['allTakks', 'myTakks']),
+    ...mapGetters('takk', ['allTakks', 'myTakks'])
   },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
@@ -107,7 +114,7 @@ export default {
       this.$router.push('/watch')
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

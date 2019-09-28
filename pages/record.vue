@@ -5,18 +5,25 @@
     align-center
   >
     <v-col
-      cols="11">
+      cols="11"
+    >
       <v-stepper v-model="e1">
         <v-stepper-header>
-          <v-stepper-step :complete="e1 > 1" step="1">録画する</v-stepper-step>
+          <v-stepper-step :complete="e1 > 1" step="1">
+            録画する
+          </v-stepper-step>
 
-          <v-divider></v-divider>
+          <v-divider />
 
-          <v-stepper-step :complete="e1 > 2" step="2">サムネイルを決める</v-stepper-step>
+          <v-stepper-step :complete="e1 > 2" step="2">
+            サムネイルを決める
+          </v-stepper-step>
 
-          <v-divider></v-divider>
+          <v-divider />
 
-          <v-stepper-step step="3">アップロードする</v-stepper-step>
+          <v-stepper-step step="3">
+            アップロードする
+          </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items>
@@ -31,16 +38,16 @@
                 </v-card>
               </v-col>
 
-              <v-btn v-if="videoChunks.length === 0" color="primary" @click="startCapture" :disabled="!isMicrophonePermitted">
-                  <v-icon>mdi-play-circle-outline</v-icon>録画開始
+              <v-btn v-if="videoChunks.length === 0" color="primary" :disabled="!isMicrophonePermitted" @click="startCapture">
+                <v-icon>mdi-play-circle-outline</v-icon>録画開始
               </v-btn>
               <v-btn v-if="videoChunks.length !== 0 && isRecording" color="error" @click="stopCapture">
                 <v-icon>mdi-pause-circle-outline</v-icon>録画停止
               </v-btn>
             </v-row>
-            <div style="width: 100%; height: 12px"></div>
+            <div style="width: 100%; height: 12px" />
             <v-row justify="center">
-              <video v-show="isRecording" autoplay :srcObject.prop="combinedStream"></video>
+              <video v-show="isRecording" autoplay :srcObject.prop="combinedStream" />
             </v-row>
           </v-stepper-content>
 
@@ -56,19 +63,19 @@
             <v-row justify="center">
               <v-col col="11">
                 <div class="image-list">
-                  <div v-for="thumbnail in thumbnails" :key="thumbnail.index" @click="clickThumbnail(thumbnail)" style="cursor: pointer;">
-                    <img :src="thumbnail"/>
+                  <div v-for="thumbnail in thumbnails" :key="thumbnail.index" style="cursor: pointer;" @click="clickThumbnail(thumbnail)">
+                    <img :src="thumbnail">
                   </div>
                 </div>
               </v-col>
             </v-row>
-            <div style="width: 100%; height: 12px"></div>
+            <div style="width: 100%; height: 12px" />
             <v-row justify="center">
-              <video v-show="isRecording" autoplay :srcObject.prop="combinedStream"></video>
+              <video v-show="isRecording" autoplay :srcObject.prop="combinedStream" />
             </v-row>
           </v-stepper-content>
 
-           <v-stepper-content step="3">
+          <v-stepper-content step="3">
             <v-col cols="11">
               <v-card>
                 <v-card-title>
@@ -83,25 +90,28 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12">
-                      <v-text-field v-model="title" label="タイトル*" required></v-text-field>
-                      <div v-show="!titleEntered" class="v-messages__message">タイトルは必須です</div>
+                      <v-text-field v-model="title" label="タイトル*" required />
+                      <div v-show="!titleEntered" class="v-messages__message">
+                        タイトルは必須です
+                      </div>
                     </v-col>
                   </v-row>
                 </v-container>
                 <small>*入力必須</small>
               </v-card-text>
               <v-card-actions>
-                <div class="flex-grow-1"></div>
-                <v-btn color="primary" @click="uploadVideo"><v-icon>mdi-cloud-upload</v-icon>アップロード</v-btn>
+                <div class="flex-grow-1" />
+                <v-btn color="primary" @click="uploadVideo">
+                  <v-icon>mdi-cloud-upload</v-icon>アップロード
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-stepper-content>
-
         </v-stepper-items>
       </v-stepper>
     </v-col>
-    <MicrophonePermissionModal v-if="showMicrophoneModal"  @close="modalClose"/>
-    <UploadCompleteModal v-if="showUploadCompleteModal" @close="toHome"/>
+    <MicrophonePermissionModal v-if="showMicrophoneModal" @close="modalClose" />
+    <UploadCompleteModal v-if="showUploadCompleteModal" @close="toHome" />
     <ThumbnailConfirmModal :status="showThumnailModal" :img="selectedThumbnail" @ok="toUploadVideo" @ng="showThumnailModal = false" />
   </v-layout>
 </template>
@@ -115,20 +125,6 @@ import ThumbnailConfirmModal from '~/components/record/ThumbnailConfirmModal'
 
 export default {
   components: { MicrophonePermissionModal, UploadCompleteModal, ThumbnailConfirmModal },
-  async mounted () {
-    const result = await navigator.permissions.query({ name: 'microphone' })
-    if (result.state !== 'granted') {
-      this.showMicrophoneModal = true
-      this.isMicrophonePermitted = false
-    } else {
-      this.isMicrophonePermitted = true
-    }
-  },
-  computed: {
-    titleEntered () {
-      return this.title.length !== 0
-    }
-  },
   data () {
     return {
       e1: 1,
@@ -147,7 +143,21 @@ export default {
       showUploadCompleteModal: false,
       showThumnailModal: false,
       title: '',
-      slideUrl: '',
+      slideUrl: ''
+    }
+  },
+  computed: {
+    titleEntered () {
+      return this.title.length !== 0
+    }
+  },
+  async mounted () {
+    const result = await navigator.permissions.query({ name: 'microphone' })
+    if (result.state !== 'granted') {
+      this.showMicrophoneModal = true
+      this.isMicrophonePermitted = false
+    } else {
+      this.isMicrophonePermitted = true
     }
   },
   methods: {
@@ -167,15 +177,15 @@ export default {
           audio: true
         })
         this.combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
-        this.mediaRecorder = new MediaRecorder(this.combinedStream, {mimeType: 'video/webm'})
-        this.mediaRecorder.addEventListener('dataavailable', event => {
-            if (event.data && event.data.size > 0) {
-              this.videoChunks.push(event.data);
-            }
+        this.mediaRecorder = new MediaRecorder(this.combinedStream, { mimeType: 'video/webm' })
+        this.mediaRecorder.addEventListener('dataavailable', (event) => {
+          if (event.data && event.data.size > 0) {
+            this.videoChunks.push(event.data)
+          }
         })
         this.mediaRecorder.start(10)
-      } catch(err) {
-        console.error("Error: " + err)
+      } catch (err) {
+        console.error('Error: ' + err)
         this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
       }
     },
@@ -188,13 +198,13 @@ export default {
         })
         this.mediaRecorder.stop()
         this.mediaRecorder = undefined
-        this.videoObject = new Blob(this.videoChunks, {type: 'video/webm'})
+        this.videoObject = new Blob(this.videoChunks, { type: 'video/webm' })
         this.videoUrlObject = window.URL.createObjectURL(this.videoObject)
         this.save({ videoObject: this.videoObject })
         this.e1 = 2
         this.shootCapture()
-      } catch(err) {
-        console.error("Error: ", err)
+      } catch (err) {
+        console.error('Error: ', err)
         this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
       }
     },
@@ -210,10 +220,10 @@ export default {
       }
 
       video.onseeked = () => {
-        if(video.currentTime < video.duration ){
+        if (video.currentTime < video.duration) {
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
-          video.currentTime += 5 
+          video.currentTime += 5
         } else {
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
@@ -238,7 +248,7 @@ export default {
       }
     },
     async uploadVideo () {
-      if (this.title.length === 0) return
+      if (this.title.length === 0) { return }
       this.activate()
       try {
         await this.upload({ title: this.title, slideUrl: this.slideUrl })
@@ -250,16 +260,16 @@ export default {
         this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
       }
     },
-    toBlob(base64) {
-      const bin = atob(base64.replace(/^.*,/, ''));
-      const buffer = new Uint8Array(bin.length);
+    toBlob (base64) {
+      const bin = atob(base64.replace(/^.*,/, ''))
+      const buffer = new Uint8Array(bin.length)
       for (let i = 0; i < bin.length; i++) {
-          buffer[i] = bin.charCodeAt(i);
+        buffer[i] = bin.charCodeAt(i)
       }
       const blob = new Blob([buffer.buffer], {
-          type: 'image/png'
-      });
-      return blob;
+        type: 'image/png'
+      })
+      return blob
     },
     validate () {
       if (this.$refs.form.validate()) {
