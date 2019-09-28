@@ -1,7 +1,8 @@
 import User from './model/user'
 
 export const state = () => ({
-    user: {}
+    user: {},
+    watchVideo: ''
 })
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
     UNSET_USER(state) {
         state.user = {}
     },
+    SET_WATCH_VIDEO (state, { watchVideo }) {
+        state.watchVideo = watchVideo
+    }
 }
 
 export const actions = {
@@ -26,6 +30,9 @@ export const actions = {
     logout({ commit }) {
         commit('UNSET_USER')
     },
+    watch ({ commit }, { video }) {
+        commit('SET_WATCH_VIDEO', { watchVideo: video })
+    }
 }
 
 export const getters = {
@@ -41,4 +48,7 @@ export const getters = {
     photoURL (state) {
         return state.user.photoURL
     },
+    watchVideo (state) {
+        return state.watchVideo
+    }
 }

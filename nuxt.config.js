@@ -6,7 +6,6 @@ export default {
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - tekktakk',
     title: 'tekktakk',
     meta: [
       { charset: 'utf-8' },

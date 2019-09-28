@@ -4,7 +4,8 @@ import { storage } from '~/plugins/firebase'
 export const state = () => ({
     video: undefined,
     thumbnail: undefined,
-    archives: []
+    archives: [],
+    takkList: []
 })
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
     },
     SET_THUMBNAIL (state, { thumbnail }) {
         state.thumbnail = thumbnail
+    },
+    SET_TAKK_LIST (state, { takkList }) {
+        state.takkList = takkList
     }
 }
 
@@ -48,7 +52,25 @@ export const actions = {
             movieFileName,
         })
     },
+    async getAllTakk ({ commit }) {
+        const { data } = await this.$axios.get('/api/takks/')
+        console.log('data', data)
+        const takkList = data.takks.map(v => new Takk({
+            id: v.id,
+            title: v.title,
+            slide: v.slide,
+            video: v.video,
+            name: v.name,
+            handleName: v.handleName,
+            thumbnail: v.thumbnail,
+            publishDate: v.publishDate
+        }))
+        commit('SET_TAKK_LIST', { takkList })
+    }
 }
 
 export const getters = {
+    allTakks (state) {
+        return state.takkList
+    }
 }

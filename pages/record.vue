@@ -210,7 +210,7 @@ export default {
         if(video.currentTime < video.duration ){
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
-          video.currentTime += 30 
+          video.currentTime += 10 
         } else {
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
@@ -286,7 +286,7 @@ video {
 
   img {
     height: 200px;
-    width: 400px;
+    width: auto;
     margin: 12px;
   }
 }

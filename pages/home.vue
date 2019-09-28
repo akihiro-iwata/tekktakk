@@ -33,26 +33,16 @@
           lg="9"
           xl="9">
           <v-layout row justify-start align-center>
-            <v-col 
+            <v-col
               cols="12"
+              md="6"
               lg="3"
               xl="3"
+              v-for="takk in allTakks"
+              :key="takk.index"
+              @click="toWatch(takk.video)"
             >
-              <TalkCard />
-            </v-col>
-            <v-col 
-              cols="12"
-              lg="3"
-              xl="3"
-            >
-              <TalkCard />
-            </v-col>
-            <v-col 
-              cols="12"
-              lg="3"
-              xl="3"
-            >
-              <TalkCard />
+              <TalkCard :thumbnail="takk.thumbnail" :publishDate="takk.publishDate" :title="takk.title" :handleName="takk.handleName"/>
             </v-col>
           </v-layout>
         </v-col>
@@ -63,37 +53,37 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import TalkCard from "~/components/index/TalkCard.vue"
 
 export default {
   components: { TalkCard },
-  data() {
-    return {
-      mode: "recent" ,
-      talks: [
-        {
-          date: '2019/1/11',
-          title: '技術書典に申し込んで本を売るまで',
-          author: '西名',
-          genre: 'その他',
-          views: 10,
-          like: 5,
-          slide: 'https://drive.google.com/file/d/101_ivAdephhW-1al24tHdn1jXRy1HmWb/view?usp=sharing'
-        }
-      ]
-    };
-  },
-  computed: {
-    isRecentMode() {
-      return this.mode === "recent";
-    },
-    isProgrammingMode() {
-      return this.mode === "programming";
+  async mounted () {
+    this.activate()
+    try {
+      await this.getAllTakk()
+      console.log('this.allTakks', this.allTakks)
+      this.deactivate()
+    } catch (e) {
+      console.error(e)
+      this.deactivate()
+      this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
     }
   },
+  computed: {
+    ...mapGetters('takk', ['allTakks']),
+  },
   methods: {
+    ...mapActions('loading', ['activate', 'deactivate']),
+    ...mapActions('takk', ['getAllTakk']),
+    ...mapActions('error', ['showError']),
+    ...mapActions('user', ['watch']),
     toRecord () {
       this.$router.push('/record')
+    },
+    toWatch (video) {
+      this.watch({ video })
+      this.$router.push('/watch')
     }
   }
 };

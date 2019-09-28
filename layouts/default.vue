@@ -31,7 +31,7 @@
       <v-toolbar-title v-text="title" />
       <div class="flex-grow-1"></div>
       <v-btn icon>
-        <img class="icon" :src="photoURL"/>
+        <img v-if="photoURL" class="icon" :src="photoURL"/>
       </v-btn>
       <div style="height: 100%; width: 2vw"></div>
     </v-app-bar>
