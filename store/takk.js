@@ -5,7 +5,8 @@ export const state = () => ({
     video: undefined,
     thumbnail: undefined,
     archives: [],
-    takkList: []
+    takkList: [],
+    myTakkList: [],
 })
 
 export const mutations = {
@@ -17,6 +18,9 @@ export const mutations = {
     },
     SET_TAKK_LIST (state, { takkList }) {
         state.takkList = takkList
+    },
+    SET_MY_TAKK_LIST (state, { takkList }) {
+        state.myTakkList = takkList
     }
 }
 
@@ -54,7 +58,6 @@ export const actions = {
     },
     async getAllTakk ({ commit }) {
         const { data } = await this.$axios.get('/api/takks/')
-        console.log('data', data)
         const takkList = data.takks.map(v => new Takk({
             id: v.id,
             title: v.title,
@@ -66,11 +69,28 @@ export const actions = {
             publishDate: v.publishDate
         }))
         commit('SET_TAKK_LIST', { takkList })
+    },
+    async getUserTakk ({ commit, rootState }) {
+        const { data } = await this.$axios.post('/api/takks/search', { uid: rootState.user.user.uid })
+        const takkList = data.takks.map(v => new Takk({
+            id: v.id,
+            title: v.title,
+            slide: v.slide,
+            video: v.video,
+            name: v.name,
+            handleName: v.handleName,
+            thumbnail: v.thumbnail,
+            publishDate: v.publishDate
+        }))
+        commit('SET_MY_TAKK_LIST', { takkList })
     }
 }
 
 export const getters = {
     allTakks (state) {
         return state.takkList
+    },
+    myTakks (state) {
+        return state.myTakkList
     }
 }

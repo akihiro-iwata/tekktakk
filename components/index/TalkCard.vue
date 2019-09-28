@@ -1,10 +1,9 @@
 <template>
-  <v-card class="mx-auto" max-width="400">
+  <v-card class="mx-auto card" max-width="300">
     <img
       class="white--text"
       :src="thumbnail"
     />
-
     <v-card-text>
       <span>{{publishDate}}</span>
       <br />
@@ -32,8 +31,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.card {
+  padding-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
 img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 15vh;
 }
 </style>

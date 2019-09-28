@@ -56,7 +56,7 @@
             <v-row justify="center">
               <v-col col="11">
                 <div class="image-list">
-                  <div v-for="thumbnail in thumbnails" :key="thumbnail.index" @click="clickThumbnail(thumbnail)">
+                  <div v-for="thumbnail in thumbnails" :key="thumbnail.index" @click="clickThumbnail(thumbnail)" style="cursor: pointer;">
                     <img :src="thumbnail"/>
                   </div>
                 </div>
@@ -74,7 +74,7 @@
                 <v-card-title>
                   <span class="headline">これで最後です！</span>
                 </v-card-title>
-                <v-card-text>タイトルとスライドのURLを入力してください。</v-card-text>
+                <v-card-text>タイトルを入力してください。</v-card-text>
               </v-card>
             </v-col>
 
@@ -85,9 +85,6 @@
                     <v-col cols="12">
                       <v-text-field v-model="title" label="タイトル*" required></v-text-field>
                       <div v-show="!titleEntered" class="v-messages__message">タイトルは必須です</div>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field v-model="slideUrl" label="スライドURL"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -216,7 +213,7 @@ export default {
         if(video.currentTime < video.duration ){
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
-          video.currentTime += 10 
+          video.currentTime += 5 
         } else {
           context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
           this.thumbnails.push(canvas.toDataURL('image/jpeg'))
