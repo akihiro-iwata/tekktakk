@@ -26,6 +26,12 @@ export default {
     publishDate: String,
     title: String,
     handleName: String,
+    showDeleteBtn: Boolean
+  },
+  methods: {
+    del () {
+      this.$emit('del')
+    }
   }
 }
 </script>

@@ -39,7 +39,7 @@
               :key="takk.index"
               @click="toWatch(takk.video)"
             >
-              <TalkCard :thumbnail="takk.thumbnail" :publishDate="takk.publishDate" :title="takk.title" :handleName="takk.handleName"/>
+              <TalkCard :showDeleteBtn=true :thumbnail="takk.thumbnail" :publishDate="takk.publishDate" :title="takk.title" :handleName="takk.handleName"/>
             </v-col>
           </v-layout>
         </v-col>
