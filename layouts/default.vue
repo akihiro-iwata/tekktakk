@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
+      v-if="$route.name !== 'index'"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="false"
