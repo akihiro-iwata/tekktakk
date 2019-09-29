@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "tekktakk-c214a",
     "public": "dist",
     "ignore": [
       "firebase.json",
