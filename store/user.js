@@ -3,9 +3,6 @@ import User from './model/user'
 export const state = () => ({
   user: {},
   watchVideo: '',
-  role: '',
-  companyId: '',
-  isAdmin: false
 })
 
 export const mutations = {
@@ -19,13 +16,6 @@ export const mutations = {
   SET_WATCH_VIDEO (state, { watchVideo }) {
     state.watchVideo = watchVideo
   },
-  SET_PROFILE (state, { profile }) {
-    state.role = profile.role
-    state.companyId = profile.company_id
-  },
-  SET_ADMIN (state, { isAdmin }) {
-    state.isAdmin = isAdmin
-  }
 }
 
 export const actions = {
@@ -34,15 +24,8 @@ export const actions = {
     const displayName = payload.user.displayName
     const email = payload.user.email
     const photoURL = payload.user.photoURL
-    const { data } = await this.$axios.post('/api/users/login', { uid, displayName, email, photoURL })
-    const { profile } = data
-    commit('SET_PROFILE', profile)
+    await this.$axios.post('/api/users/login', { uid, displayName, email, photoURL })
     commit('SET_USER', { uid, displayName, email, photoURL })
-  },
-  async adminCheck ({ commit, state }) {
-    const { data } = await this.$axios.post('/api/users/admin-check', { uid: state.user.uid })
-    const { isAdmin } = data
-    commit('SET_ADMIN', { isAdmin })
   },
   async getAllStaff ({ commit, state }) {
     await this.$axios.post('/api/users/index/all', { uid: state.user.uid, companyId: state.user.companyId })
@@ -70,9 +53,6 @@ export const getters = {
   },
   watchVideo (state) {
     return state.watchVideo
-  },
-  isAdmin (state) {
-    return state.isAdmin
   },
   companyId (state) {
     return state.companyId

@@ -27,11 +27,11 @@ export default {
       const authState = await auth.getRedirectResult()
       if (authState.user) {
         await this.login(authState)
-        await this.adminCheck()
         this.$router.push('/home')
       }
       this.deactivate()
     } catch (e) {
+      console.error(e)
       this.deactivate()
       if (e.message === 'Request failed with status code 404') {
         this.showError({ message: 'このユーザーはまだ登録されていません。自社の管理者に連絡してください。' })
@@ -43,7 +43,7 @@ export default {
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
     ...mapActions('error', ['showError']),
-    ...mapActions('user', ['login', 'adminCheck']),
+    ...mapActions('user', ['login']),
     async googleLogin () {
       try {
         this.activate()

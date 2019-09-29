@@ -29,14 +29,6 @@
             <v-list-item-title v-text="'ログアウト'" />
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="isAdmin" @click="toAdmin">
-          <v-list-item-action>
-            <v-icon>business</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="'管理画面'" />
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -71,7 +63,7 @@ import error from '~/components/error'
 export default {
   components: { loading, error },
   computed: {
-    ...mapGetters('user', ['name', 'photoURL', 'isAdmin'])
+    ...mapGetters('user', ['name', 'photoURL'])
   },
   data () {
     return {
@@ -101,9 +93,6 @@ export default {
     doLogout () {
       this.logout()
       window.location.href = '/'
-    },
-    toAdmin () {
-      this.$router.push('/admin')
     }
   }
 }
