@@ -151,6 +151,7 @@ export default {
     }
   },
   async mounted () {
+    this.thumbnails = []
     const result = await navigator.permissions.query({ name: 'microphone' })
     if (result.state !== 'granted') {
       this.showMicrophoneModal = true

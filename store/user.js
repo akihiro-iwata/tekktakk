@@ -27,9 +27,6 @@ export const actions = {
     await this.$axios.post('/api/users/login', { uid, displayName, email, photoURL })
     commit('SET_USER', { uid, displayName, email, photoURL })
   },
-  async getAllStaff ({ commit, state }) {
-    await this.$axios.post('/api/users/index/all', { uid: state.user.uid, companyId: state.user.companyId })
-  },
   logout ({ commit }) {
     commit('UNSET_USER')
   },
@@ -54,7 +51,4 @@ export const getters = {
   watchVideo (state) {
     return state.watchVideo
   },
-  companyId (state) {
-    return state.companyId
-  }
 }
