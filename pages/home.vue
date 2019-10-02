@@ -141,6 +141,7 @@ h2 {
   width: 100%;
   height: 40vh;
   background-image: url("~assets/img/books.jpg");
+  background-repeat: repeat;
   display: flex;
   justify-content: center;
   align-items: center;

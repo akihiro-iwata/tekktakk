@@ -56,8 +56,8 @@ export const actions = {
       movieFileName
     })
   },
-  async getAllTakk ({ commit }) {
-    const { data } = await this.$axios.get('/api/takks/')
+  async getAllTakk ({ commit, rootState }) {
+    const { data } = await this.$axios.get('/api/takks/', { uid: rootState.user.user.uid })
     const takkList = data.takks.map(v => new Takk({
       id: v.id,
       title: v.title,
