@@ -56,8 +56,9 @@ export const actions = {
       movieFileName
     })
   },
-  async getAllTakk ({ commit, rootState }) {
-    const { data } = await this.$axios.get('/api/takks/', { uid: rootState.user.user.uid })
+  async getAllTakk ({ commit, rootGetters }) {
+    const uid = rootGetters['user/uid']
+    const { data } = await this.$axios.post('/api/takks/', { uid })
     const takkList = data.takks.map(v => new Takk({
       id: v.id,
       title: v.title,
@@ -70,8 +71,9 @@ export const actions = {
     }))
     commit('SET_TAKK_LIST', { takkList })
   },
-  async getUserTakk ({ commit, rootState }) {
-    const { data } = await this.$axios.post('/api/takks/search', { uid: rootState.user.user.uid })
+  async getUserTakk ({ commit, rootGetters }) {
+    const uid = rootGetters['user/uid']
+    const { data } = await this.$axios.post('/api/takks/search', { uid })
     const takkList = data.takks.map(v => new Takk({
       id: v.id,
       title: v.title,

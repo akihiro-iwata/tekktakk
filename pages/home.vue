@@ -41,7 +41,7 @@
               cols="12"
               md="4"
               lg="3"
-              xl="3"
+              xl="2"
               @click="toWatch(takk.video)"
             >
               <TalkCard :show-delete-btn="true" :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
@@ -69,7 +69,7 @@
             cols="12"
             md="4"
             lg="3"
-            xl="3"
+            xl="2"
             @click="toWatch(takk.video)"
           >
             <TalkCard :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
@@ -89,8 +89,8 @@ export default {
   async mounted () {
     this.activate()
     try {
-      await this.getAllTakk()
       await this.getUserTakk()
+      await this.getAllTakk()
       this.deactivate()
     } catch (e) {
       console.error(e)

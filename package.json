@@ -19,7 +19,7 @@
     "dotenv": "^8.1.0",
     "firebase": "^7.0.0",
     "nuxt": "^2.0.0",
-    "vuex-persist": "^2.1.0"
+    "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.0.1",

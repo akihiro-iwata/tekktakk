@@ -37,7 +37,7 @@ export const actions = {
 
 export const getters = {
   uid (state) {
-    return state.user.uid
+    return (state.user.uid) ? state.user.uid : JSON.parse(sessionStorage.getItem('vuex')).user.user.uid
   },
   name (state) {
     return state.user.displayName
