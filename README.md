@@ -1,7 +1,3 @@
-# techtalk-record
-
-> My rad Nuxt.js project
-
 ## Build Setup
 
 ``` bash
