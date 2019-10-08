@@ -1,10 +1,11 @@
 <template>
   <v-card class="mx-auto card" max-width="300">
     <img
+      @click="toVideo"
       class="white--text"
       :src="thumbnail"
     >
-    <v-card-text>
+    <v-card-text @click="toVideo">
       <span>{{ publishDate }}</span>
       <br>
       <span class="text--primary">
@@ -15,6 +16,11 @@
         <span>{{ handleName }}</span>
       </div>
     </v-card-text>
+     <v-card-actions v-if="deleteMode">
+        <v-btn icon @click="tapDelete">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </v-card-actions>
   </v-card>
 </template>
 
@@ -25,11 +31,18 @@ export default {
     publishDate: String,
     title: String,
     handleName: String,
-    showDeleteBtn: Boolean
+    showDeleteBtn: Boolean,
+    deleteMode: Boolean
   },
   methods: {
     del () {
       this.$emit('del')
+    },
+    toVideo () {
+      this.$emit('toVideo')
+    },
+    tapDelete () {
+      this.$emit('tapDelete')
     }
   }
 }

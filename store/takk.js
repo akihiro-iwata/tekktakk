@@ -85,6 +85,10 @@ export const actions = {
       publishDate: v.publishDate
     }))
     commit('SET_MY_TAKK_LIST', { takkList })
+  },
+  async deleteUserTakk ({ commit, rootGetters }, { id }) {
+    const uid = rootGetters['user/uid']
+    const { data } = await this.$axios.post('/api/takks/delete', { id, uid })
   }
 }
 

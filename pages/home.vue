@@ -41,10 +41,18 @@
               cols="12"
               md="4"
               lg="3"
-              xl="2"
-              @click="toWatch(takk.video)"
+              xl="2"              
             >
-              <TalkCard :show-delete-btn="true" :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
+              <TalkCard 
+                :show-delete-btn="true" 
+                :thumbnail="takk.thumbnail" 
+                :publish-date="takk.publishDate" 
+                :title="takk.title" 
+                :handle-name="takk.handleName"
+                :deleteMode=true
+                @toVideo="toVideo(takk.video)"
+                @tapDelete="deleteVideo(takk)"              
+                 />
             </v-col>
           </v-layout>
         </v-col>
@@ -70,22 +78,37 @@
             md="4"
             lg="3"
             xl="2"
-            @click="toWatch(takk.video)"
+            @click="toVideo(takk.video)"
           >
-            <TalkCard :thumbnail="takk.thumbnail" :publish-date="takk.publishDate" :title="takk.title" :handle-name="takk.handleName" />
+            <TalkCard 
+              :thumbnail="takk.thumbnail" 
+              :publish-date="takk.publishDate" 
+              :title="takk.title" 
+              :handle-name="takk.handleName"
+              :deleteMode=false
+              @toVideo="toVideo(takk.video)"
+            />
           </v-col>
         </v-layout>
       </v-col>
     </v-layout>
+    <DeleteVideoConfirmModal 
+      :id="deleteVideoId"
+      :img="deleteVideoThumbnail" 
+      :status="showDeleteVideoModal" 
+      @ok="doDeleteVideo"
+      @ng="showDeleteVideoModal = false"
+      />
   </v-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import TalkCard from '~/components/index/TalkCard.vue'
+import DeleteVideoConfirmModal from '~/components/home/DeleteVideoConfirmModal.vue'
 
 export default {
-  components: { TalkCard },
+  components: { TalkCard, DeleteVideoConfirmModal },
   async mounted () {
     this.activate()
     try {
@@ -101,17 +124,42 @@ export default {
   computed: {
     ...mapGetters('takk', ['allTakks', 'myTakks'])
   },
+  data () {
+    return {
+      deleteVideoThumbnail: '',
+      deleteVideoId: 0,
+      showDeleteVideoModal: false,
+    }
+  },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
-    ...mapActions('takk', ['getAllTakk', 'getUserTakk']),
+    ...mapActions('takk', ['getAllTakk', 'getUserTakk', 'deleteUserTakk']),
     ...mapActions('error', ['showError']),
     ...mapActions('user', ['watch']),
     toRecord () {
       this.$router.push('/record')
     },
-    toWatch (video) {
+    toVideo (video) {
       this.watch({ video })
       this.$router.push('/watch')
+    },
+    deleteVideo (payload) {
+      this.deleteVideoThumbnail = payload.thumbnail
+      this.deleteVideoId = payload.id
+      this.showDeleteVideoModal = true      
+    },
+    async doDeleteVideo ({ id }) {
+      this.showDeleteVideoModal = false      
+      try {
+        this.activate()
+        await this.deleteUserTakk({ id })
+        await this.getUserTakk()
+        await this.getAllTakk()
+        this.deactivate()
+      } catch (e) {
+        console.error(e)
+        this.deactivate()
+      }
     }
   }
 }
