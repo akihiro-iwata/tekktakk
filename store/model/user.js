@@ -1,6 +1,5 @@
 export default class {
-  constructor ({ uid, displayName, email, photoURL }) {
-    this.uid = uid
+  constructor ({ displayName, email, photoURL }) {
     this.displayName = displayName
     this.email = email
     this.photoURL = photoURL

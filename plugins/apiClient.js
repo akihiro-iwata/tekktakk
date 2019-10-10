@@ -13,8 +13,9 @@ class ApiClient {
         )
     }
 
-    async post (path, params) {
-        params.idToken = this.store.getters['user/idToken'];
+    async post (path, params = {}) {
+        params.idToken = this.store.getters['user/idToken']
+        params.email = this.store.getters['user/email']
         const { data } = await this.axios.post(path, params)
         return data
     }

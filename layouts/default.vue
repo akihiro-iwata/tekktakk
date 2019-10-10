@@ -49,7 +49,6 @@
       :fixed="fixed"
       app
     >
-      <span>&copy; akihiro-iwata@m3 {{name}} </span>
     </v-footer>
     <loading />
     <error />

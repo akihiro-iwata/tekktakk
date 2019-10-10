@@ -2,17 +2,14 @@ import Takk from './model/takk'
 import { storage } from '~/plugins/firebase'
 
 export const state = () => ({
-  video: undefined,
   thumbnail: undefined,
   archives: [],
   takkList: [],
-  myTakkList: []
+  myTakkList: [],
+  watchVideoUrl: ''
 })
 
 export const mutations = {
-  SET_video (state, { videoObject }) {
-    state.video = videoObject
-  },
   SET_THUMBNAIL (state, { thumbnail }) {
     state.thumbnail = thumbnail
   },
@@ -21,6 +18,9 @@ export const mutations = {
   },
   SET_MY_TAKK_LIST (state, { takkList }) {
     state.myTakkList = takkList
+  },
+  SET_WATCH_VIDEO_RUL(state, { url }) {
+    state.watchVideoUrl = url
   }
 }
 
@@ -30,11 +30,12 @@ const __fileName = () => {
 }
 
 export const actions = {
-  save ({ commit }, { videoObject }) {
-    commit('SET_video', { videoObject })
-  },
   saveThumbnail ({ commit }, { thumbnail }) {
     commit('SET_THUMBNAIL', { thumbnail })
+  },
+  async view ({ commit }, { id }) {
+    const { url } = await this.$apiClient.post('/api/takks/view', { id })
+    commit('SET_WATCH_VIDEO_RUL', { url })
   },
   async upload ({ state, commit, rootState }, { title, slideUrl }) {
     const movieFileName = `${__fileName()}.webm`
@@ -47,8 +48,7 @@ export const actions = {
     await thumbnailFileNameRef.put(state.thumbnail)
     const thumbnailDownloadUrl = await thumbnailFileNameRef.getDownloadURL()
 
-    await this.$axios.post('/api/takks/create', {
-      uid: rootState.user.user.uid,
+    await this.$apiClient.post('/api/takks/create', {
       video: movieDownloadUrl,
       slide: slideUrl,
       thumbnail: thumbnailDownloadUrl,
@@ -57,8 +57,7 @@ export const actions = {
     })
   },
   async getAllTakk ({ commit, rootGetters }) {
-    const uid = rootGetters['user/uid']
-    const { data } = await this.$axios.post('/api/takks/', { uid })
+    const data = await this.$apiClient.post('/api/takks/')
     const takkList = data.takks.map(v => new Takk({
       id: v.id,
       title: v.title,
@@ -72,8 +71,7 @@ export const actions = {
     commit('SET_TAKK_LIST', { takkList })
   },
   async getUserTakk ({ commit, rootGetters }) {
-    const uid = rootGetters['user/uid']
-    const { data } = await this.$axios.post('/api/takks/search', { uid })
+    const data = await this.$apiClient.post('/api/takks/user')
     const takkList = data.takks.map(v => new Takk({
       id: v.id,
       title: v.title,
@@ -87,8 +85,7 @@ export const actions = {
     commit('SET_MY_TAKK_LIST', { takkList })
   },
   async deleteUserTakk ({ commit, rootGetters }, { id }) {
-    const uid = rootGetters['user/uid']
-    const { data } = await this.$axios.post('/api/takks/delete', { id, uid })
+    const { data } = await this.$apiClient.post('/api/takks/delete', { id })
   }
 }
 
@@ -98,5 +95,8 @@ export const getters = {
   },
   myTakks (state) {
     return state.myTakkList
+  },
+  watchVideoUrl (state) {
+    return state.watchVideoUrl
   }
 }

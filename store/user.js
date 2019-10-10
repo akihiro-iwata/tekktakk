@@ -1,13 +1,15 @@
 import User from './model/user'
+import { initApiClient } from '../plugins/apiClient'
 
 export const state = () => ({
   user: {},
   watchVideo: '',
+  idToken: ''
 })
 
 export const mutations = {
-  SET_USER (state, { uid, displayName, email, photoURL }) {
-    const user = new User({ uid, displayName, email, photoURL })
+  SET_USER (state, { displayName, email, photoURL }) {
+    const user = new User({ displayName, email, photoURL })
     state.user = user
   },
   UNSET_USER (state) {
@@ -16,16 +18,19 @@ export const mutations = {
   SET_WATCH_VIDEO (state, { watchVideo }) {
     state.watchVideo = watchVideo
   },
+  SET_ID_TOKEN (state, { idToken }) {
+    state.idToken = idToken
+  }
 }
 
 export const actions = {
-  async login ({ commit }, payload) {
-    const uid = payload.user.uid
-    const displayName = payload.user.displayName
-    const email = payload.user.email
-    const photoURL = payload.user.photoURL
-    await this.$axios.post('/api/users/login', { uid, displayName, email, photoURL })
-    commit('SET_USER', { uid, displayName, email, photoURL })
+  async login ({ commit }, { authState, idToken }) {
+    const displayName = authState.user.displayName
+    const email = authState.user.email
+    const photoURL = authState.user.photoURL
+    commit('SET_ID_TOKEN', { idToken })
+    commit('SET_USER', { displayName, email, photoURL })
+    await this.$apiClient.post('/api/users/login')
   },
   logout ({ commit }) {
     commit('UNSET_USER')
@@ -36,14 +41,11 @@ export const actions = {
 }
 
 export const getters = {
-  uid (state) {
-    return (state.user.uid) ? state.user.uid : JSON.parse(sessionStorage.getItem('vuex')).user.user.uid
-  },
   name (state) {
     return state.user.displayName
   },
   email (state) {
-    return state.user.email
+    return state.user.email ? state.user.email : JSON.parse(sessionStorage.getItem('vuex')).user.user.email
   },
   photoURL (state) {
     return state.user.photoURL
@@ -51,4 +53,7 @@ export const getters = {
   watchVideo (state) {
     return state.watchVideo
   },
+  idToken (state) {
+    return (state.idToken) ? state.idToken : JSON.parse(sessionStorage.getItem('vuex')).user.idToken
+  }
 }

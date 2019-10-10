@@ -29,7 +29,7 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <v-row justify="center">
-              <v-col cols="11">
+              <v-col cols="12">
                 <v-card>
                   <v-card-title>
                     <span class="headline">スピーチを始める</span>

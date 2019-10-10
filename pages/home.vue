@@ -50,7 +50,7 @@
                 :title="takk.title" 
                 :handle-name="takk.handleName"
                 :deleteMode=true
-                @toVideo="toVideo(takk.video)"
+                @toVideo="toVideo(takk)"
                 @tapDelete="deleteVideo(takk)"              
                  />
             </v-col>
@@ -78,7 +78,7 @@
             md="4"
             lg="3"
             xl="2"
-            @click="toVideo(takk.video)"
+            @click="toVideo(takk)"
           >
             <TalkCard 
               :thumbnail="takk.thumbnail" 
@@ -139,9 +139,8 @@ export default {
     toRecord () {
       this.$router.push('/record')
     },
-    toVideo (video) {
-      this.watch({ video })
-      this.$router.push('/watch')
+    toVideo (takk) {
+      this.$router.push(`/watch/${takk.id}`)
     },
     deleteVideo (payload) {
       this.deleteVideoThumbnail = payload.thumbnail
