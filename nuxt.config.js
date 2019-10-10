@@ -5,6 +5,9 @@ export default {
   /*
   ** Headers of the page
   */
+  env: {
+    API_URL: process.env.API_URL || 'http://localhost:4000'
+  },
   head: {
     title: 'tekktakk',
     meta: [
@@ -30,7 +33,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/vuex-persist', ssr: false }
+    { src: '~/plugins/vuex-persist', ssr: false },
+    { src: '~/plugins/apiClient', ssr: false }
+
   ],
   /*
   ** Nuxt.js dev-modules

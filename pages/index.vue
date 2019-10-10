@@ -26,7 +26,8 @@ export default {
       this.activate()
       const authState = await auth.getRedirectResult()
       if (authState.user) {
-        await this.login(authState)
+        const idToken = await auth.currentUser.getIdToken()
+        await this.login({ authState, idToken })
         this.$router.push('/home')
       }
       this.deactivate()
