@@ -14,6 +14,7 @@ export const mutations = {
   },
   UNSET_USER (state) {
     state.user = {}
+    state.idToken = ''
   },
   SET_WATCH_VIDEO (state, { watchVideo }) {
     state.watchVideo = watchVideo
@@ -45,7 +46,9 @@ export const getters = {
     return state.user.displayName
   },
   email (state) {
-    return state.user.email ? state.user.email : JSON.parse(sessionStorage.getItem('vuex')).user.user.email
+    if (state.user.email) return state.user.email 
+    if (JSON.parse(localStorage.getItem('vuex')).user.user.email) return JSON.parse(localStorage.getItem('vuex')).user.user.email 
+    return ''
   },
   photoURL (state) {
     return state.user.photoURL
@@ -54,6 +57,8 @@ export const getters = {
     return state.watchVideo
   },
   idToken (state) {
-    return (state.idToken) ? state.idToken : JSON.parse(sessionStorage.getItem('vuex')).user.idToken
+    if (state.idToken) return state.idToken
+    if (JSON.parse(localStorage.getItem('vuex'))) return JSON.parse(localStorage.getItem('vuex')).user.idToken
+    return ''
   }
 }

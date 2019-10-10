@@ -83,5 +83,11 @@ export default {
     */
     extend (config, ctx) {
     }
+  },
+  router: {
+    middleware: 'authenticated'
+  },
+  generate: {
+    fallback: true,
   }
 }
