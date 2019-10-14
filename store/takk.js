@@ -10,6 +10,9 @@ export const state = () => ({
 })
 
 export const mutations = {
+  SET_VIDEO (state, { videoObject }) {
+    state.video = videoObject
+  },
   SET_THUMBNAIL (state, { thumbnail }) {
     state.thumbnail = thumbnail
   },
@@ -30,6 +33,9 @@ const __fileName = () => {
 }
 
 export const actions = {
+  save ({ commit }, { videoObject }) {
+    commit('SET_VIDEO', { videoObject })
+  },
   saveThumbnail ({ commit }, { thumbnail }) {
     commit('SET_THUMBNAIL', { thumbnail })
   },
