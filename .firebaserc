@@ -1,12 +1,19 @@
 {
   "projects": {
-    "default": "tekktakk-c214a"
+    "default": "tekktakk-dev"
   },
   "targets": {
     "tekktakk-c214a": {
       "hosting": {
         "tekktakk-c214a": [
           "tekktakk-c214a"
+        ]
+      }
+    },
+    "tekktakk-dev": {
+      "hosting": {
+        "tekktakk-dev": [
+          "tekktakk-dev"
         ]
       }
     }
