@@ -22,7 +22,7 @@ export const mutations = {
   SET_MY_TAKK_LIST (state, { takkList }) {
     state.myTakkList = takkList
   },
-  SET_WATCH_VIDEO_RUL(state, { url }) {
+  SET_WATCH_VIDEO_URL(state, { url }) {
     state.watchVideoUrl = url
   }
 }
@@ -41,9 +41,9 @@ export const actions = {
   },
   async view ({ commit }, { id }) {
     const { url } = await this.$apiClient.post('/api/takks/view', { id })
-    commit('SET_WATCH_VIDEO_RUL', { url })
+    commit('SET_WATCH_VIDEO_URL', { url })
   },
-  async upload ({ state, commit, rootState }, { title, slideUrl }) {
+  async upload ({ state }, { title, slideUrl }) {
     const movieFileName = `${__fileName()}.webm`
     const movieFileNameRef = storage.ref('movies').child(movieFileName)
     await movieFileNameRef.put(state.video)
