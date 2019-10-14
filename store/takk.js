@@ -40,8 +40,8 @@ export const actions = {
     commit('SET_THUMBNAIL', { thumbnail })
   },
   async view ({ commit }, { id }) {
-    const { url } = await this.$apiClient.post('/api/takks/view', { id })
-    commit('SET_WATCH_VIDEO_URL', { url })
+    const { takk } = await this.$apiClient.post('/api/takks/view', { id })
+    commit('SET_WATCH_VIDEO_URL', { url: takk.videoUrl })
   },
   async upload ({ state }, { title, slideUrl }) {
     const movieFileName = `${__fileName()}.webm`
@@ -62,36 +62,44 @@ export const actions = {
       movieFileName
     })
   },
-  async getAllTakk ({ commit, rootGetters }) {
-    const data = await this.$apiClient.post('/api/takks/')
-    const takkList = data.takks.map(v => new Takk({
-      id: v.id,
-      title: v.title,
-      slide: v.slide,
-      video: v.video,
-      name: v.name,
-      handleName: v.handleName,
-      thumbnail: v.thumbnail,
-      publishDate: v.publishDate
-    }))
-    commit('SET_TAKK_LIST', { takkList })
+  async getAllTakk ({ commit }) {
+    const data = await this.$apiClient.post('/api/takks/index', { mode: 'company' })
+    if (data.takks) {
+      const takkList = data.takks.map(v => new Takk({
+        id: v.id,
+        title: v.title,
+        slide: v.slide,
+        video: v.video,
+        name: v.name,
+        handleName: v.handleName,
+        thumbnail: v.thumbnail,
+        publishDate: v.publishDate
+      }))
+      commit('SET_TAKK_LIST', { takkList })  
+    } else {
+      commit('SET_TAKK_LIST', { takkList: [] })  
+    }
   },
-  async getUserTakk ({ commit, rootGetters }) {
-    const data = await this.$apiClient.post('/api/takks/user')
-    const takkList = data.takks.map(v => new Takk({
-      id: v.id,
-      title: v.title,
-      slide: v.slide,
-      video: v.video,
-      name: v.name,
-      handleName: v.handleName,
-      thumbnail: v.thumbnail,
-      publishDate: v.publishDate
-    }))
-    commit('SET_MY_TAKK_LIST', { takkList })
+  async getUserTakk ({ commit }) {
+    const data = await this.$apiClient.post('/api/takks/index', { mode: 'user' })
+    if (data.takks) {
+      const takkList = data.takks.map(v => new Takk({
+        id: v.id,
+        title: v.title,
+        slide: v.slide,
+        video: v.video,
+        name: v.name,
+        handleName: v.handleName,
+        thumbnail: v.thumbnail,
+        publishDate: v.publishDate
+      }))
+      commit('SET_MY_TAKK_LIST', { takkList })
+    } else {
+      commit('SET_MY_TAKK_LIST', { takkList: [] })
+    }
   },
-  async deleteUserTakk ({ commit, rootGetters }, { id }) {
-    const { data } = await this.$apiClient.post('/api/takks/delete', { id })
+  async deleteUserTakk (_, { id }) {
+    await this.$apiClient.post('/api/takks/delete', { id })
   }
 }
 
