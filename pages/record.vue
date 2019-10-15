@@ -177,7 +177,7 @@ export default {
           audio: true
         })
         this.combinedStream = new MediaStream([...videoStream.getTracks(), ...audioStream.getTracks()])
-        this.mediaRecorder = new MediaRecorder(this.combinedStream, { mimeType: 'video/webm' })
+        this.mediaRecorder = new MediaRecorder(this.combinedStream, { mimeType: 'video/webm;codecs=h264' })
         this.mediaRecorder.addEventListener('dataavailable', (event) => {
           if (event.data && event.data.size > 0) {
             this.videoChunks.push(event.data)
@@ -198,7 +198,7 @@ export default {
         })
         this.mediaRecorder.stop()
         this.mediaRecorder = undefined
-        this.videoObject = new Blob(this.videoChunks, { type: 'video/webm' })
+        this.videoObject = new Blob(this.videoChunks, { type: 'video/mp4' })
         this.videoUrlObject = window.URL.createObjectURL(this.videoObject)
         this.save({ videoObject: this.videoObject })
         this.e1 = 2

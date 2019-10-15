@@ -1,11 +1,19 @@
 <template>
   <v-row justify="center">
-    <video controls :src="watchVideoUrl" />
+    <v-col cols="10" class="video-container">
+      <video
+          class="video-js "
+          ref="videoPlayer"
+        >
+      </video>
+    </v-col>
   </v-row>
 </template>
 
 <script>
 import { mapActions,mapGetters } from 'vuex'
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
 
 export default {
   async mounted () {
@@ -16,6 +24,9 @@ export default {
       }
       this.activate()
       await this.view({ id: this.$route.params.id })
+      this.player = videojs(this.$refs.videoPlayer, this.playerOptions, function onPlayerReady() {
+            console.log('onPlayerReady', this);
+      })
       this.deactivate()
     } catch (e) {
       console.error(e)
@@ -24,7 +35,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('takk', ['watchVideoUrl'])
+    ...mapGetters('takk', ['watchVideoUrl']),
+    playerOptions() {
+      return {
+        aspectRatio: '16:9',
+        height: '480',
+        autoplay: true,
+        muted: true,
+        controls: true,
+        liveui: false,
+        playbackRates: [0.7, 1.0, 1.5, 2.0],
+        sources: [{
+            type: "video/mp4",
+            src: this.watchVideoUrl
+          }],
+      }
+    }
+  },
+  data () {
+    return {
+      player: null
+    }
   },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
@@ -32,10 +63,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-video {
-  height: 85vh;
-  width: auto;
-}
-</style>

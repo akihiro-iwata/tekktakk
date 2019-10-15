@@ -44,7 +44,7 @@ export const actions = {
     commit('SET_WATCH_VIDEO_URL', { url: takk.videoUrl })
   },
   async upload ({ state }, { title, slideUrl }) {
-    const movieFileName = `${__fileName()}.webm`
+    const movieFileName = `${__fileName()}.mp4`
     const movieFileNameRef = storage.ref('movies').child(movieFileName)
     await movieFileNameRef.put(state.video)
     const movieDownloadUrl = await movieFileNameRef.getDownloadURL()

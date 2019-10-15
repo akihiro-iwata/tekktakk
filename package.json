@@ -10,7 +10,7 @@
     "start": "nuxt start",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
-    "deploy":  "export API_URL=https://tekktakk-dev.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
+    "deploy": "export API_URL=https://tekktakk-dev.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
     "prod-deploy": "export API_URL=https://tekktakk.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-c214a"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "dotenv": "^8.1.0",
     "firebase": "^7.0.0",
     "nuxt": "^2.0.0",
+    "video.js": "^7.6.5",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
