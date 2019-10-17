@@ -110,6 +110,11 @@ import DeleteVideoConfirmModal from '~/components/home/DeleteVideoConfirmModal.v
 export default {
   components: { TalkCard, DeleteVideoConfirmModal },
   async mounted () {
+    if (localStorage.getItem('goUrl')) {
+      const url = localStorage.getItem('goUrl')
+      localStorage.removeItem('goUrl')
+      this.$router.push(url)
+    }
     this.activate()
     try {
       await this.getUserTakk()
