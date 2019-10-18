@@ -10,8 +10,8 @@
     "start": "nuxt start",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
-    "deploy": "export API_URL=https://tekktakk-dev.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
-    "prod-deploy": "export API_URL=https://tekktakk.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-c214a"
+    "deploy": "firebase use tekktakk-dev && export API_URL=https://tekktakk-dev.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
+    "prod-deploy": "firebase use tekktakk-c214a && export API_URL=https://tekktakk.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-c214a"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.6.0",
