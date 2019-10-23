@@ -45,11 +45,6 @@
     <v-content>
       <nuxt />
     </v-content>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-    </v-footer>
     <loading />
     <error />
   </v-app>
@@ -79,7 +74,12 @@ export default {
           icon: 'mdi-movie',
           title: '録画',
           to: '/record'
-        }
+        },
+        {
+          icon: 'mdi-cloud-upload',
+          title: 'アップロード',
+          to: '/upload'
+        },
       ],
       miniVariant: false,
       title: 'TekkTakk'
