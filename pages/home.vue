@@ -23,7 +23,7 @@
 
       <!-- ユーザーのアップロード一覧 -->
       <div style="width: 100%; height: 3vh" />
-      <v-row no-gutters>
+      <v-row v-if="myTakks.length !== 0" no-gutters>
         <v-col cols="11" lg="4" xl="4">
           <h2 style="margin-left: 4vw">
             あなたのアップロード
