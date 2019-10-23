@@ -156,6 +156,7 @@ export default {
     ...mapActions('takk', ['upload', 'save', 'saveThumbnail']),
     ...mapActions('error', ['showError']),
     toSelectThumbnail () {
+      if (!this.videoObject) return
       this.activate()
       const reader = new FileReader()
       reader.onload = (evt) => {
