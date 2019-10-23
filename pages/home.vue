@@ -48,7 +48,6 @@
                 :thumbnail="takk.thumbnail" 
                 :publish-date="takk.publishDate" 
                 :title="takk.title" 
-                :handle-name="takk.handleName"
                 :deleteMode=true
                 @toVideo="toVideo(takk)"
                 @tapDelete="deleteVideo(takk)"              
