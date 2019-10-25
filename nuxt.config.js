@@ -36,7 +36,6 @@ export default {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/apiClient', ssr: false }
-
   ],
   /*
   ** Nuxt.js dev-modules
