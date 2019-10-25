@@ -61,5 +61,6 @@ export default {
 img {
   width: auto;
   height: 15vh;
+  max-width: 100%;
 }
 </style>
