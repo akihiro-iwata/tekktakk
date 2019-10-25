@@ -43,7 +43,7 @@ export const actions = {
     const { takk } = await this.$apiClient.post('/api/takks/view', { id })
     commit('SET_WATCH_VIDEO_URL', { url: takk.videoUrl })
   },
-  async upload ({ state }, { title, slideUrl }) {
+  async upload ({ state }, { title, slideUrl, scope }) {
     const movieFileName = `${__fileName()}.mp4`
     const movieFileNameRef = storage.ref('movies').child(movieFileName)
     await movieFileNameRef.put(state.video)
@@ -59,7 +59,8 @@ export const actions = {
       slide: slideUrl,
       thumbnail: thumbnailDownloadUrl,
       title,
-      movieFileName
+      movieFileName,
+      scope,
     })
   },
   async getAllTakk ({ commit }) {

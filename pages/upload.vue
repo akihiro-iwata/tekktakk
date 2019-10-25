@@ -80,7 +80,7 @@
                 <v-card-title>
                   <span class="headline">これで最後です！</span>
                 </v-card-title>
-                <v-card-text>タイトルを入力してください。</v-card-text>
+                <v-card-text>タイトルと公開範囲を入力してください。</v-card-text>
               </v-card>
             </v-col>
 
@@ -93,6 +93,13 @@
                       <div v-show="!titleEntered" class="v-messages__message">
                         タイトルは必須です
                       </div>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-select
+                        :items="scopeLabels"
+                        v-model="selectedscope"
+                        label="公開範囲"
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -140,12 +147,26 @@ export default {
       showUploadCompleteModal: false,
       showThumnailModal: false,
       title: '',
-      slideUrl: ''
+      slideUrl: '',
+      selectedscope: '組織全体',
     }
   },
   computed: {
     titleEntered () {
       return this.title.length !== 0
+    },
+    scopeLabels () {
+      return ['組織全体', 'URLを知っているユーザーのみ']
+    },
+    scope () {
+      switch (this.selectedscope) {
+        case '組織全体':
+          return 'public'
+          break
+        case 'URLを知っているユーザーのみ':
+          return 'limited'
+          break
+      }
     }
   },
   async mounted () {
@@ -211,7 +232,7 @@ export default {
       if (this.title.length === 0) { return }
       this.activate()
       try {
-        await this.upload({ title: this.title, slideUrl: this.slideUrl })
+        await this.upload({ title: this.title, slideUrl: this.slideUrl, scope: this.scope })
         this.deactivate()
         this.showUploadCompleteModal = true
       } catch (e) {
@@ -242,7 +263,7 @@ export default {
     },
     toHome () {
       this.$router.push('/home')
-    }
+    },
   }
 }
 </script>
