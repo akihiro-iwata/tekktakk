@@ -34,7 +34,8 @@
                   <v-card-title>
                     <span class="headline">スピーチを始める</span>
                   </v-card-title>
-                  <v-card-text>録画を開始し、スピーチを始めましょう。</v-card-text>
+                  <v-card-text v-if="isMicrophonePermitted">録画を開始し、スピーチを始めましょう。</v-card-text>
+                  <v-card-text v-if="!isMicrophonePermitted">Google Chromeからマイクへのアクセスが許可されていません。アドレスバーの鍵アイコンをクリックし、[サイトの設定]->[マイク]から、このサイトのマイク利用を許可してください。</v-card-text>
                 </v-card>
               </v-col>
 
@@ -206,8 +207,10 @@ export default {
         })
         this.mediaRecorder.start(10)
       } catch (err) {
-        console.error('Error: ' + err)
-        this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
+        if (err.message !== 'Permission denied') {
+          console.error('Error: ' + err)
+          this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
+        }
       }
     },
     stopCapture () {
@@ -298,7 +301,6 @@ export default {
       }
     },
     modalClose () {
-      this.showThumnailModal = true
       this.showMicrophoneModal = false
     },
     toHome () {

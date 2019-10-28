@@ -17,10 +17,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { auth, authProvider } from '@/plugins/firebase'
 
 export default {
+  created () {
+    if (this.idToken) { this.$router.push('/home') }
+  },
   async mounted () {
     try {
       this.activate()
@@ -40,6 +43,9 @@ export default {
         this.showError({ message: 'すみませんが、時間をおいて再度実行してください。' })
       }
     }
+  },
+  computed: {
+    ...mapGetters('user', ['idToken']),
   },
   methods: {
     ...mapActions('loading', ['activate', 'deactivate']),
