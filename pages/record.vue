@@ -112,6 +112,9 @@
                 <v-btn color="primary" @click="uploadVideo">
                   <v-icon>mdi-cloud-upload</v-icon>アップロード
                 </v-btn>
+                <v-btn color="normal" @click="downloadVideo">
+                  <v-icon>mdi-cloud-download</v-icon>ダウンロード
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-stepper-content>
@@ -125,7 +128,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import MicrophonePermissionModal from '~/components/record/MicrophonePermissionModal'
 import UploadCompleteModal from '~/components/record/UploadCompleteModal'
 import ThumbnailConfirmModal from '~/components/record/ThumbnailConfirmModal'
@@ -135,6 +138,7 @@ export default {
   data () {
     return {
       e1: 1,
+      microphoneChunks: [],
       videoChunks: [],
       videoObject: undefined,
       videoUrlObject: undefined,
@@ -158,7 +162,7 @@ export default {
     titleEntered () {
       return this.title.length !== 0
     },
-        scopeLabels () {
+    scopeLabels () {
       return ['組織全体', 'URLを知っているユーザーのみ']
     },
     scope () {
@@ -283,6 +287,14 @@ export default {
         this.deactivate()
         this.showError({ message: 'エラーが発生しました。すみませんが、時間をおいて再度実行してください。' })
       }
+    },
+    async downloadVideo () {
+      const now = new Date()
+      const fileName = `${now.getFullYear()}-${(now.getMonth() + 1)}-${now.getDate()}-${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}-${now.getMilliseconds()}`
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(this.videoObject)
+      link.download = `${fileName}.webm`
+      link.click()
     },
     toBlob (base64) {
       const bin = atob(base64.replace(/^.*,/, ''))

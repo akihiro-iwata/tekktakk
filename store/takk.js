@@ -113,5 +113,5 @@ export const getters = {
   },
   watchVideoUrl (state) {
     return state.watchVideoUrl
-  }
+  },
 }
