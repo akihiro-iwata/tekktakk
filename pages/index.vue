@@ -22,7 +22,8 @@ import { auth, authProvider } from '@/plugins/firebase'
 
 export default {
   created () {
-    if (this.idToken) { this.$router.push('/home') }
+    // TODO: tokenの有効期限を見る
+    // if (this.idToken) { this.$router.push('/home') }
   },
   async mounted () {
     try {
