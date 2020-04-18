@@ -80,6 +80,11 @@ export default {
           title: 'アップロード',
           to: '/upload'
         },
+        {
+          icon: 'mdi-cloud-upload',
+          title: 'ニコ動風',
+          to: '/niconico'
+        }
       ],
       miniVariant: false,
       title: 'TekkTakk'
