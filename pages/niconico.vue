@@ -1,8 +1,8 @@
 <template>
   <div class="index-container">
     <transition-group name="comment-list" tag="p">
-      <div class="comment" :class="comment.class" v-for="comment in comments" :key="comment.text">
-        {{ comment.text }}        
+      <div class="comment" :class="v.class" v-for="(v, k) in comments" :key="k">
+        {{ v.text }}
       </div>
     </transition-group>
   </div>
@@ -10,23 +10,46 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { auth, authProvider } from '@/plugins/firebase'
+import { auth, authProvider, db } from '@/plugins/firebase'
 
 export default {
   data () {
     return {
-      comments: [
-      ]
+      doc: undefined,
+      observer: undefined,
+      comments: {}
     }
   },
   async mounted () {
-    const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    for (let i = 0; i < 10; i++) {
-      this.comments.push({
-        text: `${Math.random()}`,
-        class: this.commentHightClass()
+    this.doc = db.collection('comments').doc('StPlSU6wmUMOIt4aBMoM')
+    await this.doc.set({}) // データクリア(ワークアラウンド)
+
+    this.observer = this.doc.onSnapshot(docSnapshot => {
+      let data = docSnapshot.data()
+      if (!data || !data[0]) return
+      data = data[0]
+      
+      const snapShotKeys = Object.keys(data)
+      const displayedCommentKeys = Object.keys(this.comments)
+      
+      // 差分あれば流す
+      snapShotKeys.forEach(k => {
+        if (!displayedCommentKeys.includes(k)) {
+          this.$set(this.comments, k, {
+            text: data[k],
+            class: this.commentHightClass()
+          })
+        }
       })
-      await _sleep(1000);
+    })
+    const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    for (let i = 0; i < 10; i++) {
+      // set firebase 
+      const key = Math.random()
+      const data = {}
+      data[key] = Math.random()
+      this.doc.update(data)
+      await _sleep(1000)
     }
   },
   methods: {
@@ -100,7 +123,7 @@ export default {
  
   .comment-list-enter-active, .comment-list-leave-activee {
     display: inline !important;
-    animation: left-to-right 20s;
+    animation: left-to-right 30s;
   }
 
   .comment-list-enter, .comment-list-leave-to {
