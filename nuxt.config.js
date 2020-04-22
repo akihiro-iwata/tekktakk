@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+require('dotenv').config()
 
 export default {
   mode: 'spa',
@@ -7,7 +8,8 @@ export default {
   */
   env: {
     API_URL: process.env.API_URL || 'http://localhost:4000',
-    ENV: process.env.ENV
+    ENV: process.env.ENV,
+    DOCUMENT_ID: process.env.DOCUMENT_ID
   },
   head: {
     title: 'tekktakk',

@@ -21,7 +21,7 @@ export default {
     }
   },
   async mounted () {
-    this.doc = db.collection('comments').doc('StPlSU6wmUMOIt4aBMoM')
+    this.doc = db.collection('comments').doc(process.env.DOCUMENT_ID)
     await this.doc.set({}) // データクリア(ワークアラウンド)
 
     this.observer = this.doc.onSnapshot(docSnapshot => {
