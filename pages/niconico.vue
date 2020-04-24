@@ -63,15 +63,6 @@ export default {
         }
       });
     });
-    const _sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-    for (let i = 0; i < 10; i++) {
-      const date = new Date();
-      const key = date.getTime();
-      const data = {};
-      data[key] = Math.random();
-      this.doc.update(data);
-      await _sleep(1000);
-    }
   },
   methods: {
     ...mapActions("loading", ["activate", "deactivate"]),
