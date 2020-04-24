@@ -43,13 +43,13 @@ export default {
   },
   async mounted() {
     this.deactivate();
+    console.log(process.env.DOCUMENT_ID);
     this.doc = db.collection("comments").doc(process.env.DOCUMENT_ID);
     await this.doc.set({}); // データクリア(ワークアラウンド)
 
     this.observer = this.doc.onSnapshot(docSnapshot => {
       let data = docSnapshot.data();
-      if (!data || !data[0]) return;
-      data = data[0];
+      if (!data) return;
 
       const snapShotKeys = Object.keys(data);
       const displayedCommentKeys = Object.keys(this.comments);
@@ -63,14 +63,15 @@ export default {
         }
       });
     });
-    // const _sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-    // for (let i = 0; i < 10; i++) {
-    //   const key = Math.random();
-    //   const data = {};
-    //   data[key] = Math.random();
-    //   this.doc.update(data);
-    //   await _sleep(1000);
-    // }
+    const _sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    for (let i = 0; i < 10; i++) {
+      const date = new Date();
+      const key = date.getTime();
+      const data = {};
+      data[key] = Math.random();
+      this.doc.update(data);
+      await _sleep(1000);
+    }
   },
   methods: {
     ...mapActions("loading", ["activate", "deactivate"]),
@@ -181,7 +182,7 @@ export default {
   @keyframes left-to-right {
     0% {
       position: absolute;
-      left: -100vw;
+      left: -50vw;
     }
 
     100% {
