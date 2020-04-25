@@ -10,7 +10,7 @@
     "start": "nuxt start",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
-    "deploy": "firebase use tekktakk-dev && export ENV=stg && export API_URL=https://tekktakk-dev.herokuapp.com && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
+    "deploy": "firebase use tekktakk-dev && export ENV=stg && export API_URL=https://tekktakk-dev.herokuapp.com && export DOCUMENT_ID=StPlSU6wmUMOIt4aBMoM && nuxt generate && firebase deploy --only hosting:tekktakk-dev",
     "prod-deploy": "firebase use tekktakk-c214a && export ENV=prod && export API_URL=https://tekktakk.herokuapp.com && export DOCUMENT_ID=43hZAZNcfFx2zZC8wc51 && nuxt generate && firebase deploy --only hosting:tekktakk-c214a"
   },
   "dependencies": {

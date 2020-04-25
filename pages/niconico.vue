@@ -43,7 +43,6 @@ export default {
   },
   async mounted() {
     this.deactivate();
-    console.log(process.env.DOCUMENT_ID);
     this.doc = db.collection("comments").doc(process.env.DOCUMENT_ID);
     await this.doc.set({}); // データクリア(ワークアラウンド)
 
@@ -109,9 +108,9 @@ export default {
   }
 
   .comment {
-    font-size: 32px;
+    font-size: 54px;
     width: 100vw;
-    color: red;
+    color: #e74c3c;
     position: absolute;
     top: -50vh;
     display: none;
