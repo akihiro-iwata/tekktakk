@@ -108,7 +108,7 @@ export default {
   }
 
   .comment {
-    font-size: 54px;
+    font-size: 48px;
     width: 100vw;
     color: #e74c3c;
     position: absolute;
@@ -160,7 +160,7 @@ export default {
   .comment-list-enter-active,
   .comment-list-leave-activee {
     display: inline !important;
-    animation: left-to-right 30s;
+    animation: right-to-left 30s;
   }
 
   .comment-list-enter,
@@ -178,6 +178,18 @@ export default {
     100% {
       position: absolute;
       left: 200vw;
+    }
+  }
+
+  @keyframes right-to-left {
+    0% {
+      position: absolute;
+      left: 200vw;
+    }
+
+    100% {
+      position: absolute;
+      left: -200vw;
     }
   }
 }

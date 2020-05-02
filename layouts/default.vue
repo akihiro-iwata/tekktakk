@@ -8,13 +8,7 @@
       app
     >
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -32,11 +26,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      v-if="$route.name !== 'index'"
-      fixed
-      app
-    >
+    <v-app-bar v-if="$route.name !== 'index'" fixed app>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <div class="flex-grow-1" />
@@ -51,56 +41,56 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import loading from '~/components/loading'
-import error from '~/components/error'
+import { mapGetters, mapActions } from "vuex";
+import loading from "~/components/loading";
+import error from "~/components/error";
 
 export default {
   components: { loading, error },
   computed: {
-    ...mapGetters('user', ['name', 'photoURL'])
+    ...mapGetters("user", ["name", "photoURL"])
   },
-  data () {
+  data() {
     return {
       drawer: false,
       fixed: false,
       items: [
         {
-          icon: 'mdi-home',
-          title: 'ホーム',
-          to: '/home'
+          icon: "mdi-home",
+          title: "ホーム",
+          to: "/home"
         },
         {
-          icon: 'mdi-movie',
-          title: '録画',
-          to: '/record'
+          icon: "mdi-movie",
+          title: "録画",
+          to: "/record"
         },
         {
-          icon: 'mdi-cloud-upload',
-          title: 'アップロード',
-          to: '/upload'
+          icon: "mdi-cloud-upload",
+          title: "アップロード",
+          to: "/upload"
         },
         {
-          icon: 'mdi-cloud-upload',
-          title: 'ニコ動風',
-          to: '/niconico'
+          icon: "mdi-cloud-upload",
+          title: "◯◯動風",
+          to: "/niconico"
         }
       ],
       miniVariant: false,
-      title: 'TekkTakk'
-    }
+      title: "TekkTakk"
+    };
   },
   methods: {
-    ...mapActions('user', ['logout']),
-    toHome () {
-      this.$router.push('/home')
+    ...mapActions("user", ["logout"]),
+    toHome() {
+      this.$router.push("/home");
     },
-    doLogout () {
-      this.logout()
-      window.location.href = '/'
+    doLogout() {
+      this.logout();
+      window.location.href = "/";
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
